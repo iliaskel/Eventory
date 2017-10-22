@@ -1,6 +1,5 @@
 package com.example.android.eventory.Home;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,9 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.android.eventory.R;
-import com.example.android.eventory.Signing.PlaceInformation;
 import com.example.android.eventory.Signing.SignInActivity;
-import com.example.android.eventory.Utils.StringFixer;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,7 +43,7 @@ public class AddEventActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private DatabaseReference myRef;
-    private FirebaseUser mUser;
+    private FirebaseUser mCurrentUser;
     private String mUserId;
 
 
@@ -63,6 +60,37 @@ public class AddEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
+        findViews();
+
+
+        // Setting up FireBase authentication/database
+        // Getting mCurrentUser && mUserId
+        setUpFireBase();
+
+        // Pulling Place info stored in FireBase Database
+        getUserPlacesInfo();
+
+        setListeners();
+
+    }
+
+    private void setUpFireBase() {
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance();
+        myRef=mDatabase.getReference();
+        mCurrentUser =mAuth.getCurrentUser();
+        try{
+            mUserId= mCurrentUser.getUid();
+        }
+        catch (NullPointerException e){
+            showToast("You are not logged in. Please log-in");
+            Intent signInIntent=new Intent(this, SignInActivity.class);
+            startActivity(signInIntent);
+            finish();
+        }
+    }
+
+    private void findViews() {
         mNewEventName =(EditText) findViewById(R.id.et_new_event_name);
         mNewEventType =(EditText) findViewById(R.id.et_new_event_type);
         mAddEventBtn=(Button)findViewById(R.id.new_event_add_btn);
@@ -71,26 +99,10 @@ public class AddEventActivity extends AppCompatActivity {
         mNewEventMonth=(EditText)findViewById(R.id.et_new_event_month);
         mNewEventDay=(EditText)findViewById(R.id.et_new_event_day);
 
-
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance();
-        mUser=mAuth.getCurrentUser();
-        try{
-            mUserId=mUser.getUid();
-        }
-        catch (NullPointerException e){
-            showToast("You are not logged in. Please log-in");
-            Intent signInIntent=new Intent(this, SignInActivity.class);
-            startActivity(signInIntent);
-            finish();
-        }
-        getUserPlacesInfo();
-        setListeners();
-
     }
 
     private void getUserPlacesInfo() {
-        myRef=mDatabase.getReference();
+
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -142,14 +154,19 @@ public class AddEventActivity extends AppCompatActivity {
                     StringBuilder latLng=new StringBuilder();
                     latLng.append(mLatitude+" ");
                     latLng.append(mLongitude);
-
                     String latLngString=latLng.toString().replace(".",",");
+                    Log.d(TAG, "latLng" + latLngString);
 
-                    EventInformation event=new EventInformation(eventName,mPlaceName,eventType,date.toString());
-                    myRef.child("events").child(latLngString).setValue(event).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    String key=myRef.child("events").push().getKey();
+
+                    EventInformation event=new EventInformation(eventName,mPlaceName,eventType,date.toString(),latLngString);
+                    Log.d(TAG, "onClick: EVENT "+event.toString());
+                    myRef.child("events").child(key).setValue(event).addOnCompleteListener(new OnCompleteListener<Void>() {
+
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             showToast("successfully entered the event");
+                            finish();
                         }
                     });
                 }

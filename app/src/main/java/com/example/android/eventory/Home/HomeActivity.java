@@ -34,9 +34,11 @@ public class HomeActivity extends AppCompatActivity{
 
     //vars
     private static final String TAG = "HomeActivity";
-    private static final int ACTIVITY_NUMBER=0;
-    private boolean mIsOwner =false;
+    private static final int ACTIVITY_NUMBER=0; //Used for displaying the bottom navigation's view proper checked button
+    private boolean mIsOwner =false;            //Used for defining if the user is owner of a place and setting up the fab
+    private boolean isFirstTime=true;           //Used for defining is it's the first time displaying the event's list
     private ArrayList<EventInformation> mEventsList=new ArrayList<>();
+
 
 
     private RecyclerView mEventsRecyclerView;
@@ -69,15 +71,7 @@ public class HomeActivity extends AppCompatActivity{
         // Setting up **Custom Bottom Navigation view
         setUpBottomNavigationView();
 
-        //set mAddEvent listener
-        //if(mAddEvent.getVisibility()==View.VISIBLE)
-         //   addEventListener();
 
-        Log.d(TAG, "addEventListener: settting up listener");
-
-    }
-
-    private void addEventListener() {
 
     }
 
@@ -123,29 +117,43 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     private void initRecyclerView() {
+
         LinearLayoutManager layoutManager=new LinearLayoutManager(this);
         mEventsRecyclerView.setLayoutManager(layoutManager);
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        final HomeAdapter adapter=new HomeAdapter(mEventsList);
+
+        // Called every time the database is changed && the first time activity is called
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mIsOwner =isOwner(dataSnapshot);
-                setUpFab();
-                Log.d(TAG, "onDataChange: isOwner " +mIsOwner);
-                for(DataSnapshot ds:dataSnapshot.child("events").getChildren()){
-                    String coordinatesInString=ds.getKey();
-                    if(StringFixer.isEventNear(coordinatesInString)){
-                        EventInformation event=new EventInformation();
-                        event.setEvent_name(ds.getValue(EventInformation.class).getEvent_name());
-                        event.setPlace_name(ds.getValue(EventInformation.class).getPlace_name());
-                        event.setDate(ds.getValue(EventInformation.class).getDate());
-                        event.setType(ds.getValue(EventInformation.class).getType());
 
-                        mEventsList.add(event);
-                        Log.d(TAG, "onDataChange: " +mEventsList.size());
-                    }
+                //clearing the events list so events won't be duplicated
+                mEventsList.clear();
+               for(DataSnapshot ds:dataSnapshot.child("events").getChildren()){                     //getting all the events
+                   EventInformation event=new EventInformation();
+                   event.setLatLng(ds.getValue(EventInformation.class).getLatLng());
+                   String coordinatesInString=event.getLatLng();                                    //getting the event's coordinates
+                   if(StringFixer.isEventNear(coordinatesInString)){                                //IF event is near **should fix the user's preferences for manual accepted distance
+                       event.setEvent_name(ds.getValue(EventInformation.class).getEvent_name());
+                       event.setPlace_name(ds.getValue(EventInformation.class).getPlace_name());
+                       event.setDate(ds.getValue(EventInformation.class).getDate());
+                       event.setType(ds.getValue(EventInformation.class).getType());
+
+                       mEventsList.add(event);
+                       Log.d(TAG, "onDataChange: " +mEventsList.size());
+                   }
+               }
+                if(isFirstTime){
+                    mIsOwner =isOwner(dataSnapshot);
+                    setUpFab();
+                    Log.d(TAG, "onDataChange: isOwner " +mIsOwner);
+                    mEventsRecyclerView.setAdapter(adapter);
+                    return;
                 }
-                HomeAdapter adapter=new HomeAdapter(mEventsList);
-                mEventsRecyclerView.setAdapter(adapter);
+                else{
+                    adapter.notifyDataSetChanged();
+                }
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -162,7 +170,6 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     private void setUpFab() {
-        Log.d(TAG, "setUpFab: " +mIsOwner);
         if(mIsOwner) {
             Log.d(TAG, "setUpFab: IS OWNER");
             mAddEvent.setVisibility(View.VISIBLE);
@@ -172,7 +179,7 @@ public class HomeActivity extends AppCompatActivity{
                     Log.d(TAG, "onClick: clicked");
                     Intent addEventIntent=new Intent(HomeActivity.this,AddEventActivity.class);
                     startActivity(addEventIntent);
-                }
+            }
             });
         }
         else{
@@ -190,9 +197,12 @@ public class HomeActivity extends AppCompatActivity{
         MenuItem menuItem=menu.getItem(ACTIVITY_NUMBER);
         menuItem.setChecked(true);
     }
+
     /**
      * ====================================================================
      */
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
