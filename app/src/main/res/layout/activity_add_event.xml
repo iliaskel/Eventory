@@ -23,7 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp">
-        <EditText android:id="@+id/et_new_event_name"
+        <EditText
+            android:id="@+id/et_new_event_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/new_event_name"/>
@@ -45,8 +46,11 @@
 
 
     <LinearLayout
+        android:layout_marginTop="15dp"
+        android:id="@+id/ll_date"
+        android:clickable="true"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:weightSum="120">
 
@@ -54,38 +58,59 @@
             android:id="@+id/tv_new_event_date"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="20dp"
             android:layout_weight="20"
             android:text="Date: "
             android:textSize="20dp" />
 
-
-            <EditText
-                android:textAlignment="center"
-                android:id="@+id/et_new_event_year"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Year"
-                android:layout_weight="20"
-            />
+                android:layout_height="match_parent"
+                android:layout_weight="25"
 
-        <EditText
-            android:textAlignment="center"
-            android:id="@+id/et_new_event_month"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Month"
-            android:layout_weight="20"
-            />
+                >
+                <EditText
+                    android:id="@+id/et_new_event_year"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Year"
+                    android:textAlignment="center"
+                    android:clickable="true"
+                    />
+            </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:textAlignment="center"
-            android:id="@+id/et_new_event_day"
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Day"
-            android:layout_weight="20"
-            />
+            android:layout_height="match_parent"
+            android:layout_weight="25"
+            >
+            <EditText
+                android:id="@+id/et_new_event_month"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                android:hint="Month"
+                android:clickable="true"
+                />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="25"
+            >
+            <EditText
+                android:id="@+id/et_new_event_day"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                android:hint="Day"
+                android:clickable="true"
+                />
+        </android.support.design.widget.TextInputLayout>
+
 
 
 

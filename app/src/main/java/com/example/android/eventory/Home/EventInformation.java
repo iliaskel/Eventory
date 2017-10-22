@@ -12,6 +12,9 @@ public class EventInformation {
     private String date;
     private String latLng;
 
+    private double latitude;
+    private double longitude;
+
     public EventInformation(String event_name, String place_name, String type, String date,String latLng){
         this.event_name=event_name;
         this.place_name=place_name;
@@ -19,6 +22,17 @@ public class EventInformation {
         this.date=date;
         this.latLng=latLng;
     }
+
+    public EventInformation(String event_name, String place_name, String type, String date,double latitude,double longitude){
+        this.event_name=event_name;
+        this.place_name=place_name;
+        this.type=type;
+        this.date=date;
+        this.latitude=latitude;
+        this.longitude=longitude;
+    }
+
+
 
     public EventInformation(){}
 
@@ -68,5 +82,21 @@ public class EventInformation {
         event+="\ntype: "+type;
         event+="\nlatLng: "+latLng;
         return event;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

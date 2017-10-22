@@ -1,7 +1,6 @@
 package com.example.android.eventory.Signing;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,7 +11,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.eventory.Data.EventsDbHelper;
 import com.example.android.eventory.Home.HomeActivity;
 import com.example.android.eventory.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -66,7 +64,6 @@ public class SignInActivity extends AppCompatActivity {
                                 showToast("Successfuly signed in: "+email);
                                 Intent homeIntent=new Intent(SignInActivity.this,HomeActivity.class);
                                 startActivity(homeIntent);
-                                finish();
                             }
                         }
                     });
@@ -140,6 +137,6 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void showToast(String s) {
-        Toast.makeText(this,s,Toast.LENGTH_LONG).show();
+        Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
     }
 }

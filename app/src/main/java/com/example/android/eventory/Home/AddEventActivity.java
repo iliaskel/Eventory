@@ -1,5 +1,6 @@
 package com.example.android.eventory.Home;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,10 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.android.eventory.R;
+import com.example.android.eventory.Signing.PlaceInformation;
 import com.example.android.eventory.Signing.SignInActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -22,6 +26,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Calendar;
 
 /**
  * Created by ikelasid on 10/21/2017.
@@ -38,6 +44,7 @@ public class AddEventActivity extends AppCompatActivity {
     private EditText mNewEventDay;
     private Button mCancelButton;
     private Button mAddEventBtn;
+    private LinearLayout mLlDate;
 
 
     private FirebaseAuth mAuth;
@@ -50,6 +57,10 @@ public class AddEventActivity extends AppCompatActivity {
     //vars
     private String mAddress;
     private String mPlaceName;
+
+    private double mLatitudeDouble;
+    private double mLongitudeDouble;
+    //delete lat/lng String after complete
     private String mLatitude;
     private String mLongitude;
     private String mEventsName;
@@ -60,8 +71,7 @@ public class AddEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
-        findViews();
-
+        findViewsById();
 
         // Setting up FireBase authentication/database
         // Getting mCurrentUser && mUserId
@@ -70,9 +80,17 @@ public class AddEventActivity extends AppCompatActivity {
         // Pulling Place info stored in FireBase Database
         getUserPlacesInfo();
 
-        setListeners();
+        // CANCEL && ADD event listeners
+        setAddingEventsListeners();
+
+        // Date picker listeners
+        setCalendarListeners();
+
+
 
     }
+
+
 
     private void setUpFireBase() {
         mAuth = FirebaseAuth.getInstance();
@@ -90,7 +108,7 @@ public class AddEventActivity extends AppCompatActivity {
         }
     }
 
-    private void findViews() {
+    private void findViewsById() {
         mNewEventName =(EditText) findViewById(R.id.et_new_event_name);
         mNewEventType =(EditText) findViewById(R.id.et_new_event_type);
         mAddEventBtn=(Button)findViewById(R.id.new_event_add_btn);
@@ -106,10 +124,10 @@ public class AddEventActivity extends AppCompatActivity {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mAddress=dataSnapshot.child("places").child(mUserId).child("address").getValue().toString();
-                mPlaceName=dataSnapshot.child("places").child(mUserId).child("name").getValue().toString();
-                mLatitude=dataSnapshot.child("places").child(mUserId).child("latitude").getValue().toString();
-                mLongitude=dataSnapshot.child("places").child(mUserId).child("longitude").getValue().toString();
+                mAddress=dataSnapshot.child("places").child(mUserId).getValue(PlaceInformation.class).getAddress();
+                mPlaceName=dataSnapshot.child("places").child(mUserId).getValue(PlaceInformation.class).getName();
+                mLatitudeDouble=dataSnapshot.child("places").child(mUserId).getValue(PlaceInformation.class).getLatitudeDouble();
+                mLongitudeDouble=dataSnapshot.child("places").child(mUserId).getValue(PlaceInformation.class).getLongitudeDouble();
             }
 
             @Override
@@ -119,7 +137,21 @@ public class AddEventActivity extends AppCompatActivity {
         });
     }
 
-    private void setListeners() {
+
+    private void showToast(String s){
+        Toast.makeText(this,s,Toast.LENGTH_LONG).show();
+    }
+
+
+    /**
+     * ======== CALENDAR AND ITS  LISTENERS===========
+     */
+
+    private void setAddingEventsListeners() {
+
+
+
+
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,15 +183,9 @@ public class AddEventActivity extends AppCompatActivity {
                     date.append(eventMonth+"-");
                     date.append(eventDay);
 
-                    StringBuilder latLng=new StringBuilder();
-                    latLng.append(mLatitude+" ");
-                    latLng.append(mLongitude);
-                    String latLngString=latLng.toString().replace(".",",");
-                    Log.d(TAG, "latLng" + latLngString);
-
                     String key=myRef.child("events").push().getKey();
 
-                    EventInformation event=new EventInformation(eventName,mPlaceName,eventType,date.toString(),latLngString);
+                    EventInformation event=new EventInformation(eventName,mPlaceName,eventType,date.toString(),mLatitudeDouble,mLongitudeDouble);
                     Log.d(TAG, "onClick: EVENT "+event.toString());
                     myRef.child("events").child(key).setValue(event).addOnCompleteListener(new OnCompleteListener<Void>() {
 
@@ -175,16 +201,95 @@ public class AddEventActivity extends AppCompatActivity {
 
     }
 
+    private void setCalendarListeners() {
+        /**
+         * Adding both onFocus && onClick listeners cuz if you click on an edit text that
+         * has already focus it won't pop up the DatePicker
+         */
+
+        mNewEventYear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCalendar();
+            }
+        });
+
+        mNewEventYear.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(mNewEventYear.isFocused()) {
+                    showCalendar();
+                }
+            }
+        });
+
+        mNewEventMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCalendar();
+            }
+        });
+        mNewEventMonth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(mNewEventMonth.isFocused()) {
+                    showCalendar();
+                }
+            }
+        });
+
+        mNewEventDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCalendar();
+            }
+        });
 
 
+        mNewEventDay.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(mNewEventDay.isFocused()) {
 
+                    showCalendar();
+                }
+            }
+        });
 
-
-
-
-    private void showToast(String s){
-        Toast.makeText(this,s,Toast.LENGTH_LONG).show();
     }
+
+    private void showCalendar() {
+        final Calendar myCalendar = Calendar.getInstance();
+
+
+
+        DatePickerDialog.OnDateSetListener dateListener=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, month);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel(year,(month+1),dayOfMonth);
+            }
+        };
+        DatePickerDialog dialog=new DatePickerDialog(AddEventActivity.this,
+                dateListener,
+                myCalendar.get(Calendar.YEAR),
+                myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH));
+        dialog.show();
+    }
+
+    private void updateLabel(int year, int month, int dayOfMonth) {
+        mNewEventYear.setText(String.valueOf(year));
+        mNewEventDay.setText(String.valueOf(dayOfMonth));
+        mNewEventMonth.setText(String.valueOf(month));
+    }
+
+
+    /**
+     * ==============================
+     */
 
 
 }

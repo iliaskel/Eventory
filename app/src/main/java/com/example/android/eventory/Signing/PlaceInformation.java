@@ -5,15 +5,23 @@ package com.example.android.eventory.Signing;
  */
 
 public class PlaceInformation {
-    private String address,name,latitude,longitude;
+    private String address,name, latitude, longitude;
+    private double latitudeDouble, longitudeDouble;
 
     public PlaceInformation(){}
 
-    public PlaceInformation(String name,String address,String latitude,String longitude){
+    public PlaceInformation(String name, String address, double latitudeDouble, double longitudeDouble){
         this.name=name;
         this.address=address;
-        this.latitude=latitude;
-        this.longitude=longitude;
+        this.latitudeDouble = latitudeDouble;
+        this.longitudeDouble = longitudeDouble;
+    }
+
+    public PlaceInformation(String name, String address, String latitude, String longitude){
+        this.name=name;
+        this.address=address;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getAddress() {
@@ -47,5 +55,21 @@ public class PlaceInformation {
 
     public void setLatitude(String latitude) {
         this.latitude = latitude;
+    }
+
+    public double getLatitudeDouble() {
+        return latitudeDouble;
+    }
+
+    public void setLatitudeDouble(double latitudeDouble) {
+        this.latitudeDouble = latitudeDouble;
+    }
+
+    public double getLongitudeDouble() {
+        return longitudeDouble;
+    }
+
+    public void setLongitudeDouble(double longitudeDouble) {
+        this.longitudeDouble = longitudeDouble;
     }
 }

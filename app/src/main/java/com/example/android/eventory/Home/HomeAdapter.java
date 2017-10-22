@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.example.android.eventory.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

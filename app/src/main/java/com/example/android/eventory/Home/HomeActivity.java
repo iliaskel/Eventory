@@ -1,6 +1,7 @@
 package com.example.android.eventory.Home;
 
 import android.content.Intent;
+import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -13,10 +14,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.android.eventory.R;
-import com.example.android.eventory.Signing.SignInActivity;
+import com.example.android.eventory.Utils.DistanceMeasure;
+import com.example.android.eventory.Utils.StringUtilities;
 import com.example.android.eventory.Signing.UserInformation;
 import com.example.android.eventory.Utils.BottomNavigationViewHelper;
-import com.example.android.eventory.Utils.StringFixer;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -125,15 +126,22 @@ public class HomeActivity extends AppCompatActivity{
         // Called every time the database is changed && the first time activity is called
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot) throws NullPointerException {
 
                 //clearing the events list so events won't be duplicated
                 mEventsList.clear();
                for(DataSnapshot ds:dataSnapshot.child("events").getChildren()){                     //getting all the events
+
                    EventInformation event=new EventInformation();
-                   event.setLatLng(ds.getValue(EventInformation.class).getLatLng());
-                   String coordinatesInString=event.getLatLng();                                    //getting the event's coordinates
-                   if(StringFixer.isEventNear(coordinatesInString)){                                //IF event is near **should fix the user's preferences for manual accepted distance
+                   event.setLatitude(ds.getValue(EventInformation.class).getLatitude());
+                   event.setLongitude(ds.getValue(EventInformation.class).getLongitude());
+
+                   Location eventsLocation=new Location("");
+                   eventsLocation.setLatitude(event.getLatitude());
+                   eventsLocation.setLongitude(event.getLongitude());
+
+
+                   if(DistanceMeasure.isNear(eventsLocation)){                                      //IF event is near **should fix the user's preferences for manual accepted distance
                        event.setEvent_name(ds.getValue(EventInformation.class).getEvent_name());
                        event.setPlace_name(ds.getValue(EventInformation.class).getPlace_name());
                        event.setDate(ds.getValue(EventInformation.class).getDate());
@@ -153,6 +161,8 @@ public class HomeActivity extends AppCompatActivity{
                 else{
                     adapter.notifyDataSetChanged();
                 }
+
+
 
             }
             @Override
@@ -198,18 +208,21 @@ public class HomeActivity extends AppCompatActivity{
         menuItem.setChecked(true);
     }
 
+
+
+
     /**
      * ====================================================================
      */
+
+
+
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mAuth.signOut();
-        Intent mainIntent=new Intent(HomeActivity.this, SignInActivity.class);
-        startActivity(mainIntent);
-        finish();
     }
 
     @Override
