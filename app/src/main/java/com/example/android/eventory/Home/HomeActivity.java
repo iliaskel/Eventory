@@ -1,8 +1,11 @@
 package com.example.android.eventory.Home;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,12 +15,24 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+
+import com.example.android.eventory.FavoritesActivity;
+import com.example.android.eventory.MapActivity;
 import com.example.android.eventory.R;
+import com.example.android.eventory.SearchActivity;
+import com.example.android.eventory.UserActivity;
 import com.example.android.eventory.Utils.DistanceMeasure;
-import com.example.android.eventory.Utils.StringUtilities;
 import com.example.android.eventory.Signing.UserInformation;
 import com.example.android.eventory.Utils.BottomNavigationViewHelper;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,22 +44,23 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends AppCompatActivity{
+public class HomeActivity extends AppCompatActivity {
 
-    //TODO: ftiaxno torato layout kai meta prepei na valo ena + an einai owner
+    private static final String TAG = "HomeActivity";
+    private final Context mContex=HomeActivity.this;
 
     //vars
-    private static final String TAG = "HomeActivity";
     private static final int ACTIVITY_NUMBER=0; //Used for displaying the bottom navigation's view proper checked button
     private boolean mIsOwner =false;            //Used for defining if the user is owner of a place and setting up the fab
     private boolean isFirstTime=true;           //Used for defining is it's the first time displaying the event's list
-    private ArrayList<EventInformation> mEventsList=new ArrayList<>();
+    public static ArrayList<EventInformation> mEventsList=new ArrayList<>();
+    private Bundle eventsArrayList=new Bundle();
+    private Location mLastKnownLocation;
+    private HomeAdapter adapter=new HomeAdapter(mEventsList);
 
-
-
-    private RecyclerView mEventsRecyclerView;
     //fab for adding new events || Shown only to owners
     private FloatingActionButton mAddEvent;
+    private RecyclerView mEventsRecyclerView;
 
 
     // FireBase && User vars
@@ -61,6 +77,7 @@ public class HomeActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
         // Setting up FireBase authentication/database
         // Getting mCurrentUser && mUserId
         setUpFireBase();
@@ -72,10 +89,7 @@ public class HomeActivity extends AppCompatActivity{
         // Setting up **Custom Bottom Navigation view
         setUpBottomNavigationView();
 
-
-
     }
-
 
     /**
      * =====================================================================
@@ -121,7 +135,6 @@ public class HomeActivity extends AppCompatActivity{
 
         LinearLayoutManager layoutManager=new LinearLayoutManager(this);
         mEventsRecyclerView.setLayoutManager(layoutManager);
-        final HomeAdapter adapter=new HomeAdapter(mEventsList);
 
         // Called every time the database is changed && the first time activity is called
         myRef.addValueEventListener(new ValueEventListener() {
@@ -198,6 +211,18 @@ public class HomeActivity extends AppCompatActivity{
         }
     }
 
+
+
+    /**
+     * ====================================================================
+     */
+
+
+
+    private void showToast(String s) {
+        Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
+    }
+
     private void setUpBottomNavigationView(){
         Log.d(TAG, "setUpBottomNavigationView: setting up bottomNavigationView");
         BottomNavigationViewEx bottomNavigationViewEx=(BottomNavigationViewEx)findViewById(R.id.bottomNavViewBar);
@@ -209,33 +234,32 @@ public class HomeActivity extends AppCompatActivity{
     }
 
 
-
-
     /**
-     * ====================================================================
+     * ======== OVERRIDING METHODS=======================
      */
-
-
-
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
         mAuth.signOut();
     }
 
     @Override
     public void onStart() {
+
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+
     }
 
     @Override
     public void onStop() {
+        Log.d(TAG, "onStop: ");
         super.onStop();
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+
+
 }

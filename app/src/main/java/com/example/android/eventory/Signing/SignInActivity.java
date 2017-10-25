@@ -1,6 +1,8 @@
 package com.example.android.eventory.Signing;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +15,8 @@ import android.widget.Toast;
 
 import com.example.android.eventory.Home.HomeActivity;
 import com.example.android.eventory.R;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -23,8 +27,9 @@ import com.google.firebase.auth.FirebaseUser;
  * Created by ikelasid on 10/6/2017.
  */
 
-public class SignInActivity extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity  {
     private static final String TAG = "SignInActivity";
+    private static final int ERROR_DIALOG_REQUEST = 9001;
 
     //TODO: ADD NETWORK NOT AVAILABLE EXCEPTION
     //TODO: ADD PROGRESS BAR
@@ -40,9 +45,14 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        //checking google play services version//availability
+        isServicesOK();
+        
         findViews();
         setUpFireBase();
         setUpSignInListener();
+
+        SharedPreferences sharedPreferences= (SignInActivity.this).getPreferences(MODE_PRIVATE);
 
 
     }
@@ -139,4 +149,25 @@ public class SignInActivity extends AppCompatActivity {
     private void showToast(String s) {
         Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
     }
+
+    public boolean isServicesOK(){
+        Log.d(TAG, "isServicesOK: checking google services version");
+        int available= GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(SignInActivity.this);
+
+        if(available== ConnectionResult.SUCCESS){
+            Log.d(TAG, "isServicesOK: google play services is working");
+            return true;
+        }
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+            Log.d(TAG, "isServicesOK: google play servises isnt working but we can fix it");
+            Dialog dialog=GoogleApiAvailability.getInstance().getErrorDialog(SignInActivity.this,available,ERROR_DIALOG_REQUEST);
+            dialog.show();
+        }
+        else{
+            Log.d(TAG, "isServicesOK: Google play services isn't and won't work. You can't make map requests");
+        }
+        return false;
+
+    }
+
 }

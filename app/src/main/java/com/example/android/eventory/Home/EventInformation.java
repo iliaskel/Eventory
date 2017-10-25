@@ -1,27 +1,24 @@
 package com.example.android.eventory.Home;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by ikelasid on 10/17/2017.
  */
 
-public class EventInformation {
+public class EventInformation  {
 
     private String event_name;
     private String place_name;
     private String type;
     private String date;
-    private String latLng;
 
     private double latitude;
     private double longitude;
 
-    public EventInformation(String event_name, String place_name, String type, String date,String latLng){
-        this.event_name=event_name;
-        this.place_name=place_name;
-        this.type=type;
-        this.date=date;
-        this.latLng=latLng;
-    }
+    //default constructor
+    public EventInformation(){}
 
     public EventInformation(String event_name, String place_name, String type, String date,double latitude,double longitude){
         this.event_name=event_name;
@@ -33,14 +30,6 @@ public class EventInformation {
     }
 
 
-
-    public EventInformation(){}
-
-    public String getLatLng(){
-        return latLng;
-    }
-
-    public void setLatLng(String latLng){this.latLng=latLng;}
 
     public String getEvent_name() {
         return event_name;
@@ -74,16 +63,6 @@ public class EventInformation {
         this.date = date;
     }
 
-
-    public String toString(){
-        String event="event name: "+ event_name;
-        event+="\nevent place: "+place_name;
-        event+="\ndate: "+date;
-        event+="\ntype: "+type;
-        event+="\nlatLng: "+latLng;
-        return event;
-    }
-
     public double getLatitude() {
         return latitude;
     }
@@ -98,5 +77,19 @@ public class EventInformation {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+
+    @Override
+    public String toString() {
+        String event="";
+        event+="Event Name: "+event_name;
+        event+="\nPlace Name:" +place_name;
+        event+="\nType\t:"+ type;
+        event+="\nDate\t"+date;
+        event+="\nLat\t:"+String.valueOf(latitude);
+        event+="\nLng\t:"+String.valueOf(longitude);
+
+        return event;
     }
 }

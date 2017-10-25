@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_register_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_up_register_title"
+            android:textSize="20sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"/>
+
+
+        <!-- USERNAME -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_alignParentLeft="true"
+            android:id="@+id/til_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_register_msg"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:textSize="15sp"
+                android:id="@+id/et_sign_up_name"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:hint="Name" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- EMAIL -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/til_username"
+            android:layout_alignParentLeft="true">
+            <EditText
+                android:id="@+id/et_sign_up_email"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:textSize="15sp"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- PASSWORD -->
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_password"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/tv_register_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+            <EditText
+                android:id="@+id/et_sign_up_password"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:hint="Password"
+                android:textSize="15sp"
+                android:inputType="textPassword"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- CONFIRM PASSWORD-->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/til_password"
+            android:layout_alignParentRight="true">
+
+            <EditText
+                android:id="@+id/et_sign_up_password_confirm"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:hint="Confirm password"
+                android:textSize="15sp"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_user">
+
+        <RadioGroup
+            android:layout_marginTop="30dp"
+            android:id="@+id/rg_sign_up_user_type"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <RadioButton
+                android:id="@+id/rb_sign_up_type_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:checked="true"
+                android:text="@string/sign_up_rb_user" />
+
+            <RadioButton
+                android:id="@+id/rb_sign_up_type_owner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/sign_up_rb_owner" />
+
+        </RadioGroup>
+
+    </RelativeLayout>
+
+
+
+
+
+</RelativeLayout>
