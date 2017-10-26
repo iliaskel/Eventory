@@ -47,7 +47,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
     private Context mContext=SignUpActivity.this;
 
     private AutoCompleteTextView mPlaceAddress;
-    private EditText mUserName,mUserEmail, mUserPassword,mPlaceName,mPlacePhone;
+    private EditText mUserName,mUserEmail, mUserPassword,mPlaceName,mPasswordConfirm;
     private RadioGroup mUserTypeGroup;
     private RelativeLayout mRlUserType;
     private Button mSignUpButton;
@@ -147,60 +147,92 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
     private void createNewPlace() {
         final String email=mUserEmail.getText().toString();
         String password= mUserPassword.getText().toString();
+        String passwordConfirm=mPasswordConfirm.getText().toString();
         final String username=mUserName.getText().toString();
         final String placeName=mPlaceName.getText().toString();
         final String placeAddress=mPlaceAddress.getText().toString();
 
 
-        if(!email.equals("") && !password.equals("") && !username.equals("")
-                && !placeName.equals("") && !placeAddress.equals("")){
+        if(email.equals("") || password.equals("") || username.equals("")
+                || placeName.equals("") || placeAddress.equals("") || passwordConfirm.equals("")) {
+            showToast("Please fill all the fields");
+            return;
+        }
+        if (!password.equals(passwordConfirm)) {
+            showToast("Password don't match");
+            return;
+        }
+        if (!SignUpCredentialsChecker.isUsernameValid(username)) {
+            showToast("Username is now valid");
+            return;
+        }
+        if (!SignUpCredentialsChecker.isPasswordValid(password)) {
+            showToast("Password is weak");
+            return;
+        }
 
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
 
-            mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    showToast("Successfully created account: " + email);
-
+                if (task.isSuccessful()) {
                     double latitudeDouble;
                     double longitudeDouble;
-                    String addressString=mPlaceAddress.getText().toString();
-                    Geocoder geocoder=new Geocoder(SignUpActivity.this);
-                    List<Address> addressList=new ArrayList<>();
-                    try{
-                        addressList=geocoder.getFromLocationName(addressString,1);
-                        Log.d(TAG, "onComplete: address list == "+ addressList);
-                    }
-                    catch (IOException e) {
+                    String addressString = mPlaceAddress.getText().toString();
+                    Geocoder geocoder = new Geocoder(SignUpActivity.this);
+                    List<Address> addressList = new ArrayList<>();
+
+
+                    try {
+                        addressList = geocoder.getFromLocationName(addressString, 1);
+                        Log.d(TAG, "onComplete: address list == " + addressList);
+                    } catch (IOException e) {
+                        mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    showToast("An error occurred getting the address.");
+                                    finish();
+                                }
+                            }
+                        });
                         Log.d(TAG, "onComplete: IOException " + e.getMessage());
                     }
 
-                    try{
-                        Log.d(TAG, "onComplete: list size == "+ String.valueOf(addressList.size()));
-                        if(addressList.size()>0){
+                    try {
+                        Log.d(TAG, "onComplete: list size == " + String.valueOf(addressList.size()));
+                        if (addressList.size() > 0) {
 
-                            Address address=addressList.get(0);
-                            latitudeDouble=address.getLatitude();
-                            Log.d(TAG, "onComplete: latitude==="+String.valueOf(latitudeDouble));
-                            longitudeDouble=address.getLongitude();
-                            Log.d(TAG, "onComplete: longitude==="+String.valueOf(longitudeDouble));
-                            insertUserInformation(email,username);
-                            insertPlaceInformation(placeName,addressString,latitudeDouble,longitudeDouble);
+                            Address address = addressList.get(0);
+                            latitudeDouble = address.getLatitude();
+                            Log.d(TAG, "onComplete: latitude===" + String.valueOf(latitudeDouble));
+                            longitudeDouble = address.getLongitude();
+                            Log.d(TAG, "onComplete: longitude===" + String.valueOf(longitudeDouble));
+                            insertUserInformation(email, username);
+                            insertPlaceInformation(placeName, addressString, latitudeDouble, longitudeDouble);
                             mAuth.signOut();
                             finish();
                         }
+                    } catch (NullPointerException e) {
+                        mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    showToast("An error occurred getting the address.");
+                                    finish();
+                                }
+                            }
+                        });
+                        Log.d(TAG, "onComplete: NullPointerException  " + e.getMessage());
                     }
-                    catch (NullPointerException e){
-                        Log.d(TAG, "onComplete: NullPointerException  "+e.getMessage());
-                    }
-
-
                 }
-            });
-        }
-        else{
-            showToast("Please fill all the fields.");
-        }
+                else{
+                    showToast("An error occurred ");
+                }
+            }
+        });
     }
+
     private void insertPlaceInformation(String placeName, String placeAddress, double latitude, double longitude) {
         String userId=mAuth.getCurrentUser().getUid();
         PlaceInformation placeInfo=new PlaceInformation(placeName,placeAddress,latitude,longitude);
@@ -213,43 +245,44 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
         final String email = mUserEmail.getText().toString();
         String password = mUserPassword.getText().toString();
         final String username = mUserName.getText().toString();
+        String passwordConfirm=mPasswordConfirm.getText().toString();
 
-
-        if (!email.equals("") && !password.equals("") && !username.equals("")) {
-            if (SignUpCredentialsChecker.isUsernameValid(username)) {
-                if (SignUpCredentialsChecker.isPasswordValid(password)) {
-                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                showToast("Successfully created account: " + email);
-                                insertUserInformation(email, username);
-                                mAuth.signOut();
-                                finish();
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                showToast("Badly formatted email address");
-                            }
-                        }
-                    });
-                }
-                else
-                    {
-                    showToast("password is weak");
-                }
-            }
-            else
-                {
-                showToast("username length must be over 6 characters.");
-            }
+        if(email.equals("") || password.equals("")
+                || username.equals("")
+                || passwordConfirm.equals("")) {
+            showToast("Please fill all the fields");
+            return;
         }
-        else
-            {
-            showToast("Please fill all the fields.");
+        if (!password.equals(passwordConfirm)) {
+            showToast("Password don't match");
+            return;
+        }
+        if (!SignUpCredentialsChecker.isUsernameValid(username)) {
+            showToast("Username is now valid");
+            return;
+        }
+        if (!SignUpCredentialsChecker.isPasswordValid(password)) {
+            showToast("Password is weak");
+            return;
         }
 
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    showToast("Successfully created account: " + email);
+                    insertUserInformation(email, username);
+                    mAuth.signOut();
+                    finish();
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                    showToast("An error occurred");
+                    finish();
+                }
+            }
+        });
     }
     private void insertUserInformation(String email,String username){
         try{
@@ -279,6 +312,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
         mRlUserType =(RelativeLayout)findViewById(R.id.rl_place_information);
         mSignUpButton=(Button)findViewById(R.id.btn_sign_up);
         mRlUserType.setVisibility(View.INVISIBLE);
+        mPasswordConfirm=(EditText)findViewById(R.id.et_sign_up_password_confirm);
     }
 
     private void setUpAddressAutocomplete() {
