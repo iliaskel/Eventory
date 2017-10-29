@@ -17,6 +17,8 @@ import com.example.android.eventory.Home.HomeActivity;
 import com.example.android.eventory.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -52,7 +54,6 @@ public class SignInActivity extends AppCompatActivity  {
         setUpFireBase();
         setUpSignInListener();
 
-        SharedPreferences sharedPreferences= (SignInActivity.this).getPreferences(MODE_PRIVATE);
 
 
     }

@@ -1,9 +1,12 @@
 package com.example.android.eventory;
 
+import android.*;
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -73,13 +76,43 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             EventInformation event;
             LatLng latLng;
             event = eventsList.get(i);
-            Log.d(TAG, "onMapReady: EVENT++"+event.toString());
+            Log.d(TAG, "onMapReady: EVENT++" + event.toString());
             latLng = new LatLng(event.getLatitude(), event.getLongitude());
             markerOptions.position(latLng);
             markerOptions.title(event.getEvent_name());
             googleMap.addMarker(markerOptions);
         }
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(40.6328284, 22.9469633)));
+            ActivityCompat.requestPermissions(this,new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+            },10);
+
+        }else{
+            googleMap.setMyLocationEnabled(true);
+        }
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.6328284, 22.9469633),13));
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case 10:
+                for(int i=0;i<grantResults.length;i++){
+                    if(grantResults[i]==PackageManager.PERMISSION_DENIED)
+                        return;
+                }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 }

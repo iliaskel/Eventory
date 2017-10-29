@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginTop="30dp"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/rl_user_general"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_up_register_title"
+            android:textSize="30sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"/>
+
+
+
+        <TextView
+            android:text="@string/sign_up_username_input"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="74dp"
+            android:layout_marginTop="83dp"
+            android:gravity="bottom"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="74dp"
+            android:id="@+id/tv_sign_up_name" />
+
+        <EditText
+            android:id="@+id/et_sign_up_name"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@+id/tv_sign_up_name"
+            android:layout_marginTop="83dp"
+            android:gravity="bottom"
+            android:textAlignment="center"
+            android:layout_marginLeft="7dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_sign_up_password"
+            android:text="@string/sign_up_password_input"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tv_sign_up_email"
+            android:layout_alignRight="@id/tv_sign_up_name"
+            android:gravity="bottom"
+            />
+
+        <EditText
+            android:id="@+id/et_sign_up_password"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/et_sign_up_email"
+            android:layout_toRightOf="@+id/tv_sign_up_password"
+            android:gravity="bottom"
+            android:textAlignment="center"
+            android:layout_marginLeft="7dp"
+            android:inputType="textPassword"
+            />
+        <TextView
+            android:id="@+id/tv_sign_up_email"
+            android:text="@string/sign_up_email_input"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tv_sign_up_name"
+            android:layout_alignLeft="@id/tv_sign_up_name"
+            android:gravity="bottom"
+            />
+
+        <EditText
+            android:id="@+id/et_sign_up_email"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/et_sign_up_name"
+            android:layout_toRightOf="@+id/tv_sign_up_email"
+            android:gravity="bottom"
+            android:textAlignment="center"
+            android:layout_marginLeft="7dp"
+            android:inputType="textEmailAddress"
+            />
+
+        <TextView
+            android:id="@+id/tv_sign_up_user_type"
+            android:text="@string/sign_up_user_type"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@id/tv_sign_up_password"
+            android:layout_alignRight="@id/tv_sign_up_email"
+            android:gravity="bottom"
+            />
+
+        <RadioGroup
+            android:id="@+id/rg_sign_up_user_type"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/et_sign_up_password"
+            android:layout_marginLeft="7dp"
+            android:layout_toRightOf="@+id/tv_sign_up_user_type"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <RadioButton
+                android:id="@+id/rb_sign_up_type_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:checked="true"
+                android:text="@string/sign_up_rb_user" />
+
+            <RadioButton
+                android:id="@+id/rb_sign_up_type_owner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/sign_up_rb_owner" />
+
+        </RadioGroup>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_place_information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_user_general"
+        android:gravity="bottom"
+        android:visibility="visible">
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_up_place_info_title"
+            android:textSize="20sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"/>
+
+        <TextView
+            android:text="@string/sign_up_place_name"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="74dp"
+            android:layout_marginTop="83dp"
+            android:gravity="bottom"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="74dp"
+            android:id="@+id/tv_sign_up_place_name"
+            android:visibility="visible"
+            />
+
+        <EditText
+            android:id="@+id/et_sign_up_place_name"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@+id/tv_sign_up_place_address"
+            android:layout_marginTop="83dp"
+            android:gravity="bottom"
+            android:textAlignment="center"
+            android:layout_marginLeft="7dp"
+            android:visibility="visible"
+            />
+
+        <TextView
+            android:text="@string/sign_up_place_address"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tv_sign_up_place_name"
+            android:layout_alignRight="@id/tv_sign_up_place_name"
+            android:gravity="bottom"
+            android:id="@+id/tv_sign_up_place_address"
+            android:visibility="visible"/>
+
+
+        <AutoCompleteTextView
+            android:id="@+id/et_sign_up_place_address"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/et_sign_up_place_name"
+            android:layout_toRightOf="@+id/tv_sign_up_place_address"
+            android:gravity="bottom"
+            android:textAlignment="center"
+            android:layout_marginLeft="7dp"
+            android:visibility="visible"
+            />
+
+
+    </RelativeLayout>
+    <Button
+        android:id="@+id/btn_sign_up"
+        android:text="@string/sign_up_sign_up_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_place_information"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"/>
+
+
+
+
+
+
+
+
+</RelativeLayout>

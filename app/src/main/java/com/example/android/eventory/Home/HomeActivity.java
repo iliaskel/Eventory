@@ -54,7 +54,6 @@ public class HomeActivity extends AppCompatActivity {
     private boolean mIsOwner =false;            //Used for defining if the user is owner of a place and setting up the fab
     private boolean isFirstTime=true;           //Used for defining is it's the first time displaying the event's list
     public static ArrayList<EventInformation> mEventsList=new ArrayList<>();
-    private Bundle eventsArrayList=new Bundle();
     private Location mLastKnownLocation;
     private HomeAdapter adapter=new HomeAdapter(mEventsList);
 
