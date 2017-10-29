@@ -1,4 +1,4 @@
-package com.example.android.eventory.Signing;
+package com.example.android.eventory.Activities;
 
 import android.content.Context;
 import android.location.Address;
@@ -18,6 +18,8 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.android.eventory.R;
+import com.example.android.eventory.SigningInformation.PlaceInformation;
+import com.example.android.eventory.Utils.PlaceAutocompleteAdapter;
 import com.example.android.eventory.Utils.SignUpCredentialsChecker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;

@@ -1,4 +1,4 @@
-package com.example.android.eventory.Home;
+package com.example.android.eventory.SigningInformation;
 
 import android.os.Parcel;
 import android.os.Parcelable;

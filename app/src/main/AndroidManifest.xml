@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -23,35 +24,36 @@
 
 
 
-        <activity android:name=".Home.HomeActivity"
+        <activity android:name=".Activities.HomeActivity"
             android:launchMode="singleTop">
         </activity>
 
-        <activity android:name=".Home.AddEventActivity"
+        <activity android:name=".Activities.AddEventActivity"
             android:launchMode="singleTop"/>
 
-        <activity android:name=".Signing.SignUpActivity"
+        <activity android:name=".Activities.SignUpActivity"
             android:launchMode="singleTop"
-            android:noHistory="true"/>
+            android:noHistory="true">
+        </activity>
 
             <activity
-                android:name=".FavoritesActivity"
+                android:name=".Activities.FavoritesActivity"
                 android:launchMode="singleTop" />
 
         <activity
-            android:name=".MapActivity"
+            android:name=".Activities.MapActivity"
             android:launchMode="singleTop" />
 
         <activity
-            android:name=".SearchActivity"
+            android:name=".Activities.SearchActivity"
             android:launchMode="singleTop" />
 
         <activity
-            android:name=".UserActivity"
+            android:name=".Activities.UserActivity"
             android:launchMode="singleTop" />
 
 
-        <activity android:name=".Signing.SignInActivity">
+        <activity android:name=".Activities.SignInActivity">
             <intent-filter>
 
                 <action android:name="android.intent.action.MAIN" />

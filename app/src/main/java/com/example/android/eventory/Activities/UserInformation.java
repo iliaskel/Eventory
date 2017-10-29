@@ -1,4 +1,4 @@
-package com.example.android.eventory.Signing;
+package com.example.android.eventory.Activities;
 
 /**
  * Created by ikelasid on 10/8/2017.
@@ -14,7 +14,7 @@ public class UserInformation {
         this.name=name;
         this.type=type;
     }
-    public UserInformation(){};
+    public UserInformation(){}
 
 
     public String getName() {

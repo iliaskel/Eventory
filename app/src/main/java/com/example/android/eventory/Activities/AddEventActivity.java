@@ -1,4 +1,4 @@
-package com.example.android.eventory.Home;
+package com.example.android.eventory.Activities;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -15,8 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.android.eventory.R;
-import com.example.android.eventory.Signing.PlaceInformation;
-import com.example.android.eventory.Signing.SignInActivity;
+import com.example.android.eventory.SigningInformation.EventInformation;
+import com.example.android.eventory.SigningInformation.PlaceInformation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;

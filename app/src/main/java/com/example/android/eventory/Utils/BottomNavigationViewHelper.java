@@ -7,12 +7,12 @@ import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.android.eventory.FavoritesActivity;
-import com.example.android.eventory.Home.HomeActivity;
-import com.example.android.eventory.MapActivity;
+import com.example.android.eventory.Activities.FavoritesActivity;
+import com.example.android.eventory.Activities.HomeActivity;
+import com.example.android.eventory.Activities.MapActivity;
 import com.example.android.eventory.R;
-import com.example.android.eventory.SearchActivity;
-import com.example.android.eventory.UserActivity;
+import com.example.android.eventory.Activities.SearchActivity;
+import com.example.android.eventory.Activities.UserActivity;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 /**

@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package com.example.android.eventory.Signing;
+package com.example.android.eventory.Utils;
 
 import android.content.Context;
 import android.graphics.Typeface;

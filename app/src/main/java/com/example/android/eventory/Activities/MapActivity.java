@@ -1,9 +1,7 @@
-package com.example.android.eventory;
+package com.example.android.eventory.Activities;
 
-import android.*;
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,8 +12,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.android.eventory.Home.EventInformation;
-import com.example.android.eventory.Home.HomeActivity;
+import com.example.android.eventory.SigningInformation.EventInformation;
+import com.example.android.eventory.R;
 import com.example.android.eventory.Utils.BottomNavigationViewHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,7 +24,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ikelasid on 10/1/2017.
@@ -43,7 +40,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreate: entered");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(com.example.android.eventory.R.layout.activity_maps);
 
         eventsList = HomeActivity.mEventsList;
 

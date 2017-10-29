@@ -1,11 +1,9 @@
-package com.example.android.eventory.Home;
+package com.example.android.eventory.Activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,21 +16,11 @@ import android.view.View;
 import android.widget.Toast;
 
 
-import com.example.android.eventory.FavoritesActivity;
-import com.example.android.eventory.MapActivity;
+import com.example.android.eventory.SigningInformation.EventInformation;
+import com.example.android.eventory.HomeRecyclerView.HomeAdapter;
 import com.example.android.eventory.R;
-import com.example.android.eventory.SearchActivity;
-import com.example.android.eventory.UserActivity;
 import com.example.android.eventory.Utils.DistanceMeasure;
-import com.example.android.eventory.Signing.UserInformation;
 import com.example.android.eventory.Utils.BottomNavigationViewHelper;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -51,10 +39,10 @@ public class HomeActivity extends AppCompatActivity {
 
     //vars
     private static final int ACTIVITY_NUMBER=0; //Used for displaying the bottom navigation's view proper checked button
-    private boolean mIsOwner =false;            //Used for defining if the user is owner of a place and setting up the fab
+    protected boolean mIsOwner =false;            //Used for defining if the user is owner of a place and setting up the fab
     private boolean isFirstTime=true;           //Used for defining is it's the first time displaying the event's list
-    public static ArrayList<EventInformation> mEventsList=new ArrayList<>();
-    private Location mLastKnownLocation;
+    protected static ArrayList<EventInformation> mEventsList=new ArrayList<>();
+    protected Location mLastKnownLocation;
     private HomeAdapter adapter=new HomeAdapter(mEventsList);
 
     //fab for adding new events || Shown only to owners
@@ -63,12 +51,12 @@ public class HomeActivity extends AppCompatActivity {
 
 
     // FireBase && User vars
-    private String mUserId;
-    private FirebaseAuth mAuth;
-    private FirebaseDatabase mDatabase;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private DatabaseReference myRef;
-    private FirebaseUser mCurrentUser;
+    protected String mUserId;
+    protected FirebaseAuth mAuth;
+    protected FirebaseDatabase mDatabase;
+    protected FirebaseAuth.AuthStateListener mAuthListener;
+    protected DatabaseReference myRef;
+    protected FirebaseUser mCurrentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

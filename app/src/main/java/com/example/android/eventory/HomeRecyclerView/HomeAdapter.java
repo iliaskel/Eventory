@@ -1,4 +1,4 @@
-package com.example.android.eventory.Home;
+package com.example.android.eventory.HomeRecyclerView;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.android.eventory.SigningInformation.EventInformation;
 import com.example.android.eventory.R;
 
 import java.util.List;
