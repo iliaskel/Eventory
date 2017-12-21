@@ -24,36 +24,28 @@
 
 
 
-        <activity android:name=".Activities.HomeActivity"
-            android:launchMode="singleTop">
+        <activity android:name=".Activities.EventsActivity"
+            android:launchMode="singleInstance">
         </activity>
 
         <activity android:name=".Activities.AddEventActivity"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleInstance"/>
 
-        <activity android:name=".Activities.SignUpActivity"
-            android:launchMode="singleTop"
+        <activity android:name=".SigningActivities.SignUpActivity"
+            android:launchMode="singleInstance"
             android:noHistory="true">
         </activity>
 
-            <activity
-                android:name=".Activities.FavoritesActivity"
-                android:launchMode="singleTop" />
-
         <activity
             android:name=".Activities.MapActivity"
-            android:launchMode="singleTop" />
-
-        <activity
-            android:name=".Activities.SearchActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
 
         <activity
             android:name=".Activities.UserActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
 
 
-        <activity android:name=".Activities.SignInActivity">
+        <activity android:name=".SigningActivities.SignInActivity">
             <intent-filter>
 
                 <action android:name="android.intent.action.MAIN" />

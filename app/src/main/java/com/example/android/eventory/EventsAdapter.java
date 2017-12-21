@@ -1,4 +1,4 @@
-package com.example.android.eventory.HomeRecyclerView;
+package com.example.android.eventory;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,8 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.android.eventory.SigningInformation.EventInformation;
-import com.example.android.eventory.R;
+import com.example.android.eventory.Signingformation.EventInformation;
 
 import java.util.List;
 
@@ -17,13 +16,13 @@ import java.util.List;
  * Created by ikelasid on 10/12/2017.
  */
 
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
-    private static final String TAG = "HomeAdapter";
+public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.HomeViewHolder> {
+    private static final String TAG = "EventsAdapter";
 
     List<EventInformation> mEventsList;
 
-    public HomeAdapter(List<EventInformation> eventsList){
-        Log.d(TAG, "HomeAdapter: entered");
+    public EventsAdapter(List<EventInformation> eventsList){
+        Log.d(TAG, "EventsAdapter: entered");
         mEventsList=eventsList;
     }
 

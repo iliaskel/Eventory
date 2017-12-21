@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.android.eventory.R;
+import com.example.android.eventory.Signingformation.UserInformation;
 import com.example.android.eventory.Utils.BottomNavigationViewHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,7 +27,7 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class UserActivity extends AppCompatActivity {
     private static final String TAG = "UserActivity";
-    private static final int ACTIVITY_NUMBER=4;
+    private static final int ACTIVITY_NUMBER=2;
 
     private TextView usernameTextView;
     private FirebaseAuth mAuth;

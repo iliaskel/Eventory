@@ -7,11 +7,9 @@ import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.android.eventory.Activities.FavoritesActivity;
-import com.example.android.eventory.Activities.HomeActivity;
+import com.example.android.eventory.Activities.EventsActivity;
 import com.example.android.eventory.Activities.MapActivity;
 import com.example.android.eventory.R;
-import com.example.android.eventory.Activities.SearchActivity;
 import com.example.android.eventory.Activities.UserActivity;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -26,6 +24,8 @@ public class BottomNavigationViewHelper {
         Log.d(TAG, "setUpBottomNavigationView");
         bottomNavigationViewEx.enableAnimation(false);
         bottomNavigationViewEx.enableShiftingMode(false);
+        bottomNavigationViewEx.enableItemShiftingMode(false);
+        bottomNavigationViewEx.setIconsMarginTop(60);
         //bottomNavigationViewEx.enableItemShiftingMode(false);
         //bottomNavigationViewEx.setTextVisibility(false);
     }
@@ -37,23 +37,18 @@ public class BottomNavigationViewHelper {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.ic_home:
-                        Intent homeIntent= new Intent(context, HomeActivity.class);
+                        Intent homeIntent= new Intent(context, EventsActivity.class);
+                        homeIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         context.startActivity(homeIntent);
-                        break;
-                    case R.id.ic_search:
-                        Intent searchIntent=new Intent(context, SearchActivity.class);
-                        context.startActivity(searchIntent);
                         break;
                     case R.id.ic_map:
                         Intent mapIntent=new Intent(context, MapActivity.class);
+                        mapIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         context.startActivity(mapIntent);
-                        break;
-                    case R.id.ic_star:
-                        Intent favoritesIntent=new Intent(context, FavoritesActivity.class);
-                        context.startActivity(favoritesIntent);
                         break;
                     case R.id.ic_user:
                         Intent userIntent=new Intent(context, UserActivity.class);
+                        userIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         context.startActivity(userIntent);
                         break;
                 }

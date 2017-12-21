@@ -15,8 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.android.eventory.R;
-import com.example.android.eventory.SigningInformation.EventInformation;
-import com.example.android.eventory.SigningInformation.PlaceInformation;
+import com.example.android.eventory.SigningActivities.SignInActivity;
+import com.example.android.eventory.Signingformation.EventInformation;
+import com.example.android.eventory.Signingformation.PlaceInformation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -92,7 +93,7 @@ public class AddEventActivity extends AppCompatActivity {
 
 
 
-    private void setUpFireBase() {
+        private void setUpFireBase() {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         myRef=mDatabase.getReference();
@@ -108,7 +109,7 @@ public class AddEventActivity extends AppCompatActivity {
         }
     }
 
-    private void findViewsById() {
+        private void findViewsById() {
         mNewEventName =(EditText) findViewById(R.id.et_new_event_name);
         mNewEventType =(EditText) findViewById(R.id.et_new_event_type);
         mAddEventBtn=(Button)findViewById(R.id.new_event_add_btn);
@@ -119,7 +120,7 @@ public class AddEventActivity extends AppCompatActivity {
 
     }
 
-    private void getUserPlacesInfo() {
+        private void getUserPlacesInfo() {
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -138,16 +139,15 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
 
-    private void showToast(String s){
-        Toast.makeText(this,s,Toast.LENGTH_LONG).show();
-    }
+
+
 
 
     /**
      * ======== CALENDAR AND ITS  LISTENERS===========
      */
 
-    private void setAddingEventsListeners() {
+        private void setAddingEventsListeners() {
 
 
 
@@ -201,7 +201,7 @@ public class AddEventActivity extends AppCompatActivity {
 
     }
 
-    private void setCalendarListeners() {
+        private void setCalendarListeners() {
         /**
          * Adding both onFocus && onClick listeners cuz if you click on an edit text that
          * has already focus it won't pop up the DatePicker
@@ -258,7 +258,7 @@ public class AddEventActivity extends AppCompatActivity {
 
     }
 
-    private void showCalendar() {
+        private void showCalendar() {
         final Calendar myCalendar = Calendar.getInstance();
 
 
@@ -280,7 +280,7 @@ public class AddEventActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void updateLabel(int year, int month, int dayOfMonth) {
+        private void updateLabel(int year, int month, int dayOfMonth) {
         mNewEventYear.setText(String.valueOf(year));
         mNewEventDay.setText(String.valueOf(dayOfMonth));
         mNewEventMonth.setText(String.valueOf(month));
@@ -290,6 +290,10 @@ public class AddEventActivity extends AppCompatActivity {
     /**
      * ==============================
      */
+
+        private void showToast(String s){
+        Toast.makeText(this,s,Toast.LENGTH_LONG).show();
+    }
 
 
 }

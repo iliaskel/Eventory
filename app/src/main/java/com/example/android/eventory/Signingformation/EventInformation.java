@@ -1,7 +1,4 @@
-package com.example.android.eventory.SigningInformation;
-
-import android.os.Parcel;
-import android.os.Parcelable;
+package com.example.android.eventory.Signingformation;
 
 /**
  * Created by ikelasid on 10/17/2017.

@@ -1,4 +1,4 @@
-package com.example.android.eventory.Activities;
+package com.example.android.eventory.SigningActivities;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.eventory.Activities.EventsActivity;
 import com.example.android.eventory.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -48,13 +49,16 @@ public class SignInActivity extends AppCompatActivity  {
         
         findViews();
         setUpFireBase();
-        setUpSignInListener();
+        setSignInListener();
 
 
 
     }
 
-    private void setUpSignInListener() {
+    /**
+     * =================== Init Methods ============================
+     */
+        private void setSignInListener() {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +73,7 @@ public class SignInActivity extends AppCompatActivity  {
                             }
                             else{
                                 showToast("Successfuly signed in: "+email);
-                                Intent homeIntent=new Intent(SignInActivity.this,HomeActivity.class);
+                                Intent homeIntent=new Intent(SignInActivity.this,EventsActivity.class);
                                 startActivity(homeIntent);
                             }
                         }
@@ -93,7 +97,7 @@ public class SignInActivity extends AppCompatActivity  {
 
     }
 
-    private void setUpFireBase() {
+        private void setUpFireBase() {
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -102,7 +106,7 @@ public class SignInActivity extends AppCompatActivity  {
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    Intent homeIntent=new Intent(SignInActivity.this,HomeActivity.class);
+                    Intent homeIntent=new Intent(SignInActivity.this,EventsActivity.class);
                     startActivity(homeIntent);
                     finish();
                 } else {
@@ -115,7 +119,7 @@ public class SignInActivity extends AppCompatActivity  {
         };
     }
 
-    private void findViews() {
+        private void findViews() {
         mInputMail=(TextView)findViewById(R.id.et_input_email);
         mInputPassword=(TextView)findViewById(R.id.et_input_password);
         mLoginButton=(Button)findViewById(R.id.btn_login);
@@ -123,25 +127,37 @@ public class SignInActivity extends AppCompatActivity  {
     }
 
 
-    @Override
-    public void onStart() {
+
+    /**
+     * ==================================================================
+     */
+
+    /**
+     * ====================== LifeCycle Methods ========================
+     */
+
+        @Override
+        public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
     }
 
-    @Override
-    public void onStop() {
+        @Override
+        public void onStop() {
         super.onStop();
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
 
-
-    @Override
-    protected void onDestroy() {
+        @Override
+        protected void onDestroy() {
         super.onDestroy();
     }
+
+    /**
+     *======================================================================
+     */
 
     private void showToast(String s) {
         Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
@@ -166,5 +182,4 @@ public class SignInActivity extends AppCompatActivity  {
         return false;
 
     }
-
 }

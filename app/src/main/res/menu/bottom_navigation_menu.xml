@@ -10,23 +10,12 @@
     </item>
 
     <item
-        android:id="@+id/ic_search"
-        android:title=""
-        android:icon="@drawable/ic_action_search">
-    </item>
-
-    <item
         android:id="@+id/ic_map"
         android:title=""
         android:icon="@drawable/ic_action_map">
 
     </item>
 
-    <item
-        android:id="@+id/ic_star"
-        android:title=""
-        android:icon="@drawable/ic_action_star">
-    </item>
     <item
         android:id="@+id/ic_user"
         android:icon="@drawable/ic_action_user"

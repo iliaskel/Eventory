@@ -12,7 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.android.eventory.SigningInformation.EventInformation;
+import com.example.android.eventory.Signingformation.EventInformation;
 import com.example.android.eventory.R;
 import com.example.android.eventory.Utils.BottomNavigationViewHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,8 +31,9 @@ import java.util.ArrayList;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG = "MapActivity";
-    private static final int ACTIVITY_NUMBER = 2;
+    private static final int ACTIVITY_NUMBER = 1;
     private Context mContext = MapActivity.this;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 10;
 
     private ArrayList<EventInformation> eventsList = new ArrayList<>();
 
@@ -42,7 +43,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(com.example.android.eventory.R.layout.activity_maps);
 
-        eventsList = HomeActivity.mEventsList;
+        eventsList = EventsActivity.mEventsList;
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -53,15 +54,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setUpBottomNavigationView();
     }
 
-    private void setUpBottomNavigationView() {
-        Log.d(TAG, "setUpBottomNavigationView: setting up bottomNavigationView");
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
-        BottomNavigationViewHelper.setUpBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(MapActivity.this, bottomNavigationViewEx);
-        Menu menu = bottomNavigationViewEx.getMenu();
-        MenuItem menuItem = menu.getItem(ACTIVITY_NUMBER);
-        menuItem.setChecked(true);
-    }
+
 
 
     public void onMapReady(GoogleMap googleMap) {
@@ -79,29 +72,31 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             markerOptions.title(event.getEvent_name());
             googleMap.addMarker(markerOptions);
         }
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(this,new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
-            },10);
+            },LOCATION_PERMISSION_REQUEST_CODE);
 
         }else{
             googleMap.setMyLocationEnabled(true);
         }
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.6328284, 22.9469633),13));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.6328284, 22.9469633),10));
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){
-            case 10:
+            case LOCATION_PERMISSION_REQUEST_CODE:
                 for(int i=0;i<grantResults.length;i++){
                     if(grantResults[i]==PackageManager.PERMISSION_DENIED)
                         return;
                 }
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.map);
+                mapFragment.getMapAsync(this);
         }
     }
 
@@ -111,5 +106,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+
+    private void setUpBottomNavigationView() {
+        Log.d(TAG, "setUpBottomNavigationView: setting up bottomNavigationView");
+        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
+        BottomNavigationViewHelper.setUpBottomNavigationView(bottomNavigationViewEx);
+        BottomNavigationViewHelper.enableNavigation(MapActivity.this, bottomNavigationViewEx);
+        Menu menu = bottomNavigationViewEx.getMenu();
+        MenuItem menuItem = menu.getItem(ACTIVITY_NUMBER);
+        menuItem.setChecked(true);
     }
 }

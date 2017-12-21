@@ -16,9 +16,10 @@ import android.view.View;
 import android.widget.Toast;
 
 
-import com.example.android.eventory.SigningInformation.EventInformation;
-import com.example.android.eventory.HomeRecyclerView.HomeAdapter;
+import com.example.android.eventory.EventsAdapter;
+import com.example.android.eventory.Signingformation.EventInformation;
 import com.example.android.eventory.R;
+import com.example.android.eventory.Signingformation.UserInformation;
 import com.example.android.eventory.Utils.DistanceMeasure;
 import com.example.android.eventory.Utils.BottomNavigationViewHelper;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,10 +33,10 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends AppCompatActivity {
+public class EventsActivity extends AppCompatActivity {
 
-    private static final String TAG = "HomeActivity";
-    private final Context mContex=HomeActivity.this;
+    private static final String TAG = "EventsActivity";
+    private final Context mContex=EventsActivity.this;
 
     //vars
     private static final int ACTIVITY_NUMBER=0; //Used for displaying the bottom navigation's view proper checked button
@@ -43,7 +44,7 @@ public class HomeActivity extends AppCompatActivity {
     private boolean isFirstTime=true;           //Used for defining is it's the first time displaying the event's list
     protected static ArrayList<EventInformation> mEventsList=new ArrayList<>();
     protected Location mLastKnownLocation;
-    private HomeAdapter adapter=new HomeAdapter(mEventsList);
+    private EventsAdapter adapter=new EventsAdapter(mEventsList);
 
     //fab for adding new events || Shown only to owners
     private FloatingActionButton mAddEvent;
@@ -79,10 +80,9 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     * =====================================================================
+     * =================== Init Methods ============================
      */
-
-    private void setUpFireBase() {
+        private void setUpFireBase() {
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser =mAuth.getCurrentUser();
         try{
@@ -112,13 +112,13 @@ public class HomeActivity extends AppCompatActivity {
         };
     }
 
-    private void findViews() {
+        private void findViews() {
         mAddEvent=(FloatingActionButton)findViewById(R.id.fab_add_event);
         mEventsRecyclerView=(RecyclerView)findViewById(R.id.rv_events);
         mEventsRecyclerView.setHasFixedSize(true);
     }
 
-    private void initRecyclerView() {
+        private void initRecyclerView() {
 
         LinearLayoutManager layoutManager=new LinearLayoutManager(this);
         mEventsRecyclerView.setLayoutManager(layoutManager);
@@ -130,27 +130,27 @@ public class HomeActivity extends AppCompatActivity {
 
                 //clearing the events list so events won't be duplicated
                 mEventsList.clear();
-               for(DataSnapshot ds:dataSnapshot.child("events").getChildren()){                     //getting all the events
+                for(DataSnapshot ds:dataSnapshot.child("events").getChildren()){                     //getting all the events
 
-                   EventInformation event=new EventInformation();
-                   event.setLatitude(ds.getValue(EventInformation.class).getLatitude());
-                   event.setLongitude(ds.getValue(EventInformation.class).getLongitude());
+                    EventInformation event=new EventInformation();
+                    event.setLatitude(ds.getValue(EventInformation.class).getLatitude());
+                    event.setLongitude(ds.getValue(EventInformation.class).getLongitude());
 
-                   Location eventsLocation=new Location("");
-                   eventsLocation.setLatitude(event.getLatitude());
-                   eventsLocation.setLongitude(event.getLongitude());
+                    Location eventsLocation=new Location("");
+                    eventsLocation.setLatitude(event.getLatitude());
+                    eventsLocation.setLongitude(event.getLongitude());
 
 
-                   if(DistanceMeasure.isNear(eventsLocation)){                                      //IF event is near **should fix the user's preferences for manual accepted distance
-                       event.setEvent_name(ds.getValue(EventInformation.class).getEvent_name());
-                       event.setPlace_name(ds.getValue(EventInformation.class).getPlace_name());
-                       event.setDate(ds.getValue(EventInformation.class).getDate());
-                       event.setType(ds.getValue(EventInformation.class).getType());
+                    if(DistanceMeasure.isNear(eventsLocation)){                                      //IF event is near **should fix the user's preferences for manual accepted distance
+                        event.setEvent_name(ds.getValue(EventInformation.class).getEvent_name());
+                        event.setPlace_name(ds.getValue(EventInformation.class).getPlace_name());
+                        event.setDate(ds.getValue(EventInformation.class).getDate());
+                        event.setType(ds.getValue(EventInformation.class).getType());
 
-                       mEventsList.add(event);
-                       Log.d(TAG, "onDataChange: " +mEventsList.size());
-                   }
-               }
+                        mEventsList.add(event);
+                        Log.d(TAG, "onDataChange: " +mEventsList.size());
+                    }
+                }
                 if(isFirstTime){
                     mIsOwner =isOwner(dataSnapshot);
                     setUpFab();
@@ -172,14 +172,7 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isOwner(DataSnapshot dataSnapshot) {
-        String userType=dataSnapshot.child("users").child(mUserId).getValue(UserInformation.class).getType();
-        if (userType.equals("owner"))
-            return true;
-        return false;
-    }
-
-    private void setUpFab() {
+        private void setUpFab() {
         if(mIsOwner) {
             Log.d(TAG, "setUpFab: IS OWNER");
             mAddEvent.setVisibility(View.VISIBLE);
@@ -187,9 +180,9 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "onClick: clicked");
-                    Intent addEventIntent=new Intent(HomeActivity.this,AddEventActivity.class);
+                    Intent addEventIntent=new Intent(EventsActivity.this,AddEventActivity.class);
                     startActivity(addEventIntent);
-            }
+                }
             });
         }
         else{
@@ -198,54 +191,67 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-
-
-    /**
-     * ====================================================================
-     */
-
-
-
-    private void showToast(String s) {
-        Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
-    }
-
-    private void setUpBottomNavigationView(){
+        private void setUpBottomNavigationView(){
         Log.d(TAG, "setUpBottomNavigationView: setting up bottomNavigationView");
         BottomNavigationViewEx bottomNavigationViewEx=(BottomNavigationViewEx)findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setUpBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(HomeActivity.this,bottomNavigationViewEx);
+        BottomNavigationViewHelper.enableNavigation(EventsActivity.this,bottomNavigationViewEx);
         Menu menu=bottomNavigationViewEx.getMenu();
         MenuItem menuItem=menu.getItem(ACTIVITY_NUMBER);
         menuItem.setChecked(true);
     }
 
+    /**
+     * =============================================================
+     */
+
+
+
+
+
 
     /**
-     * ======== OVERRIDING METHODS=======================
+     * ====================== LifeCycle Methods ========================
      */
-    @Override
-    protected void onDestroy() {
+        @Override
+        protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy: ");
         mAuth.signOut();
     }
 
-    @Override
-    public void onStart() {
+        @Override
+        public void onStart() {
 
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
 
     }
 
-    @Override
-    public void onStop() {
+        @Override
+        public void onStop() {
         Log.d(TAG, "onStop: ");
         super.onStop();
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+    /**
+     * ====================================================================
+     */
+
+
+    private void showToast(String s) {
+        Toast.makeText(mContex,s,Toast.LENGTH_SHORT).show();
+    }
+
+
+    private boolean isOwner(DataSnapshot dataSnapshot) {
+        String userType=dataSnapshot.child("users").child(mUserId).getValue(UserInformation.class).getType();
+        if (userType.equals("owner"))
+            return true;
+        return false;
     }
 
 

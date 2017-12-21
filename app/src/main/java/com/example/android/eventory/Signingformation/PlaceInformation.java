@@ -1,4 +1,4 @@
-package com.example.android.eventory.SigningInformation;
+package com.example.android.eventory.Signingformation;
 
 /**
  * Created by ikelasid on 10/8/2017.

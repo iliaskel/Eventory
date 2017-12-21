@@ -1,4 +1,4 @@
-package com.example.android.eventory.Activities;
+package com.example.android.eventory.SigningActivities;
 
 import android.content.Context;
 import android.location.Address;
@@ -17,8 +17,9 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.android.eventory.Signingformation.UserInformation;
 import com.example.android.eventory.R;
-import com.example.android.eventory.SigningInformation.PlaceInformation;
+import com.example.android.eventory.Signingformation.PlaceInformation;
 import com.example.android.eventory.Utils.PlaceAutocompleteAdapter;
 import com.example.android.eventory.Utils.SignUpCredentialsChecker;
 import com.google.android.gms.common.ConnectionResult;
@@ -81,71 +82,10 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
 
 
     /**
-     * ===============================================
+     * ================= Sign up Methods =============================
      */
 
-    private void setUpFireBase() {
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase=FirebaseDatabase.getInstance();
-        myRef=mDatabase.getReference();
-        if(mAuth!=null){
-            mAuth.signOut();
-        }
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-
-
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // ...
-            }
-        };
-    }
-    private void setListeners() {
-        mUserTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                if (mUserTypeGroup.getCheckedRadioButtonId() == R.id.rb_sign_up_type_user) {
-                    Log.d(TAG, "onClick: user");
-                    mRlUserType.setVisibility(View.INVISIBLE);
-                } else {
-                    Log.d(TAG, "onClick: owner");
-                    mRlUserType.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        mSignUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mUserTypeGroup.getCheckedRadioButtonId()==R.id.rb_sign_up_type_user){
-                    createNewUser();
-                }
-                else{
-                    createNewPlace();
-                }
-            }
-        });
-
-        mPlaceAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
-    }
-
-
-    private void createNewPlace() {
+        private void createNewPlace() {
         final String email=mUserEmail.getText().toString();
         String password= mUserPassword.getText().toString();
         String passwordConfirm=mPasswordConfirm.getText().toString();
@@ -233,15 +173,14 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
             }
         });
     }
-
-    private void insertPlaceInformation(String placeName, String placeAddress, double latitude, double longitude) {
+        private void insertPlaceInformation(String placeName, String placeAddress, double latitude, double longitude) {
         String userId=mAuth.getCurrentUser().getUid();
         PlaceInformation placeInfo=new PlaceInformation(placeName,placeAddress,latitude,longitude);
         myRef.child("places").child(userId).setValue(placeInfo);
     }
 
 
-    private void createNewUser() {
+        private void createNewUser() {
 
         final String email = mUserEmail.getText().toString();
         String password = mUserPassword.getText().toString();
@@ -285,7 +224,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
             }
         });
     }
-    private void insertUserInformation(String email,String username){
+        private void insertUserInformation(String email,String username){
         try{
             String userId=mAuth.getCurrentUser().getUid();
 
@@ -303,7 +242,15 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-    private void findViews() {
+    /**
+     * ===============================================================
+     */
+
+
+    /**
+     * =================== Init Methods ============================
+     */
+        private void findViews() {
         mUserName=(EditText)findViewById(R.id.et_sign_up_name);
         mUserPassword =(EditText)findViewById(R.id.et_sign_up_password);
         mUserEmail=(EditText)findViewById(R.id.et_sign_up_email);
@@ -316,9 +263,9 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
         mPasswordConfirm=(EditText)findViewById(R.id.et_sign_up_password_confirm);
     }
 
-    private void setUpAddressAutocomplete() {
+        private void setUpAddressAutocomplete() {
         mGoogleApiClient = new GoogleApiClient
-                .Builder(this)
+                .Builder(mContext)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
                 .enableAutoManage(this, this)
@@ -329,8 +276,78 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
         mPlaceAddress.setAdapter(mPlaceAutocompleteAdapter);
     }
 
+        @Override
+        public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+        private void setUpFireBase() {
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase=FirebaseDatabase.getInstance();
+        myRef=mDatabase.getReference();
+        if(mAuth!=null){
+            mAuth.signOut();
+        }
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+
+
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        };
+    }
+
+        private void setListeners() {
+        mUserTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                if (mUserTypeGroup.getCheckedRadioButtonId() == R.id.rb_sign_up_type_user) {
+                    Log.d(TAG, "onClick: user");
+                    mRlUserType.setVisibility(View.INVISIBLE);
+                } else {
+                    Log.d(TAG, "onClick: owner");
+                    mRlUserType.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        mSignUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mUserTypeGroup.getCheckedRadioButtonId()==R.id.rb_sign_up_type_user){
+                    createNewUser();
+                }
+                else{
+                    createNewPlace();
+                }
+            }
+        });
+
+        mPlaceAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
+    }
     /**
-     * ===============================================
+     * =============================================================
+     */
+
+
+    /**
+     * =================== LifeCycle Methods ============================
      */
 
     @Override
@@ -348,14 +365,15 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
 
     }
 
+    /**
+     *==================================================================
+     */
+
     private void showToast(String s) {
         Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-    }
 
 }
 
