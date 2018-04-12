@@ -1,5 +1,12 @@
 package com.example.android.eventory.Activities;
 
+/**
+ * This activity displays all the events that are near, based on the user's preferred max distance.
+ * It uses EventInformation object-class to retrieve events from the Google Firebase RealTime Database and display the events using recycler view
+ * This Activity also contains a fab --will be displayed only if the signed-in user is of type:Owner--
+ * which function is to trigger the AddNewEventActivity to add new events.
+ *  **/
+
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -105,7 +112,7 @@ public class EventsActivity extends AppCompatActivity {
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
-
+                    /** TODO: goto signIn screen if user is not signed in **/
                 }
                 // ...
             }
@@ -130,28 +137,29 @@ public class EventsActivity extends AppCompatActivity {
 
                 //clearing the events list so events won't be duplicated
                 mEventsList.clear();
-                for(DataSnapshot ds:dataSnapshot.child("events").getChildren()){                     //getting all the events
+                for(DataSnapshot ds:dataSnapshot.child("events").getChildren()) {                     //getting all the events
 
-                    EventInformation event=new EventInformation();
+                    EventInformation event = new EventInformation();
                     event.setLatitude(ds.getValue(EventInformation.class).getLatitude());
                     event.setLongitude(ds.getValue(EventInformation.class).getLongitude());
 
-                    Location eventsLocation=new Location("");
+                    Location eventsLocation = new Location("");
                     eventsLocation.setLatitude(event.getLatitude());
                     eventsLocation.setLongitude(event.getLongitude());
 
 
-                    if(DistanceMeasure.isNear(eventsLocation)){                                      //IF event is near **should fix the user's preferences for manual accepted distance
+                    if (DistanceMeasure.isNear(eventsLocation)) {                                      //IF event is near **should fix the user's preferences for manual accepted distance
                         event.setEvent_name(ds.getValue(EventInformation.class).getEvent_name());
                         event.setPlace_name(ds.getValue(EventInformation.class).getPlace_name());
                         event.setDate(ds.getValue(EventInformation.class).getDate());
                         event.setType(ds.getValue(EventInformation.class).getType());
 
                         mEventsList.add(event);
-                        Log.d(TAG, "onDataChange: " +mEventsList.size());
+                        Log.d(TAG, "onDataChange: " + mEventsList.size());
                     }
                 }
-                if(isFirstTime){
+                if(isFirstTime){      /** use adapter.getItemCount() check instead of isFirstTime **/
+                    isFirstTime=false;
                     mIsOwner =isOwner(dataSnapshot);
                     setUpFab();
                     Log.d(TAG, "onDataChange: isOwner " +mIsOwner);

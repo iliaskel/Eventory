@@ -76,6 +76,7 @@
 
         <!-- CONFIRM PASSWORD-->
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_confirm_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/til_password"
@@ -86,7 +87,7 @@
                 android:id="@+id/et_sign_up_password_confirm"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:hint="Confirm password"
+                android:hint="@string/sign_up_password_confirm_input"
                 android:textSize="15sp"
                 android:inputType="textPassword"/>
 

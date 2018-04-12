@@ -41,6 +41,10 @@ import java.util.List;
 
 /**
  * Created by ikelasid on 10/8/2017.
+ * This is the Sign-up Activity. It uses the UserInformation & PlaceInformation classes to store
+ * data about the user or/and his Place
+ *
+ * It uses the Google Autocomplete API to retrieve the Place's geolocation
  */
 
 public class SignUpActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -103,7 +107,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
             showToast("Password don't match");
             return;
         }
-        if (!SignUpCredentialsChecker.isUsernameValid(username)) {
+        if (!SignUpCredentialsChecker.isUsernameValid(username)) {              /** TODO: Update the credentials checker for more robust usernames **/
             showToast("Username is now valid");
             return;
         }

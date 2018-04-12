@@ -33,7 +33,7 @@
             />
 
         <TextView
-            android:id="@+id/tv_user__user_name"
+            android:id="@+id/tv_user_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/profile_image"
@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray"
-            android:layout_below="@id/tv_user__user_name"
+            android:layout_below="@id/tv_user_user_name"
             android:layout_marginTop="20dp"/>
 
     </RelativeLayout>

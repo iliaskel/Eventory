@@ -32,6 +32,8 @@ import java.util.Calendar;
 
 /**
  * Created by ikelasid on 10/21/2017.
+ * This Activity's purpose is to add new events to our existing events database.
+ * It uses the EventInformation class-object to store the event's info to the Google Firebase RealTime Database
  */
 
 public class AddEventActivity extends AppCompatActivity {
@@ -166,7 +168,6 @@ public class AddEventActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: add clicked");
                 String eventName=mNewEventName.getText().toString();
-                Log.d(TAG, "onClick: name "+eventName);
                 String eventType=mNewEventType.getText().toString();
                 String eventYear=mNewEventYear.getText().toString();
                 String eventMonth=mNewEventMonth.getText().toString();

@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 /**
  * Created by ikelasid on 10/6/2017.
+ * This is the Sign-in Activity. It uses ready-Firebase-Functions to authenticate users from
+ * Google Firebase Auth
  */
 
 public class SignInActivity extends AppCompatActivity  {
