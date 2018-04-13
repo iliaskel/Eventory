@@ -17,5 +17,8 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="TextAppearence.TextInputLayout.DarkGrey" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/darkGrey</item>
+    </style>
 
 </resources>

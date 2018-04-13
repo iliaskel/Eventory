@@ -9,9 +9,11 @@
     <!-- Sign in activity . mxl strings -->
     
     <string name="sign_up_link">No account yet? Create one!</string>
+    <string name="sign_in_email">Email</string>
+    <string name="sign_in_password">Password</string>
+    <string name="sign_in_sign_in">Sign in</string>
 
     <!-- Sign up activity . xml string -->
-
     <string name="sign_up_register_title">Register New User</string>
     <string name="sign_up_username_input">Name: </string>
     <string name="sign_up_password_input">Password</string>
@@ -25,6 +27,7 @@
     <string name="sign_up_place_address">Address</string>
     <string name="sign_up_place_phone">Phone</string>
     <string name="sign_up_sign_up_button">Sign up</string>
+    <string name="sign_up_place_name">Place Name</string>
 
     <!-- New event strings -->
     <string name="new_event_name">Name</string>

@@ -1,12 +1,11 @@
 package com.example.android.eventory.Activities;
 
-import android.accessibilityservice.GestureDescription;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,8 +21,6 @@ import android.widget.Toast;
 import com.example.android.eventory.R;
 import com.example.android.eventory.Signingformation.UserInformation;
 import com.example.android.eventory.Utils.BottomNavigationViewHelper;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,13 +28,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.*;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import java.io.InputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -86,11 +84,28 @@ public class UserActivity extends AppCompatActivity {
         //Pop up menu for profile image functions
         setUpPopUpMenu();
 
+        setProfilePicture();
+
 
 
     }
-    /** onCreate End **/
 
+    private void setProfilePicture() {
+        Bitmap profileImage=null;
+
+        try {
+            File filePath = getFileStreamPath(mUserId);
+            Log.d(TAG, "setProfilePicture: onActivity FILEPATH :::: " +filePath.getAbsolutePath());
+            FileInputStream fi = new FileInputStream(filePath);
+            profileImage = BitmapFactory.decodeStream(fi);
+            profileImageView.setImageBitmap(profileImage);
+        } catch (FileNotFoundException e) {
+            Log.d(TAG, "setProfilePicture: exception catched :::: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+
+    }
 
     private void setUpPopUpMenu() {
         profileImageView.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +136,7 @@ public class UserActivity extends AppCompatActivity {
 
     private void chooseProfilePicture() {
 
+
         Intent choosePictureIntent = new Intent();
         choosePictureIntent.setType("image/*");
         choosePictureIntent.setAction(Intent.ACTION_GET_CONTENT);
@@ -128,24 +144,24 @@ public class UserActivity extends AppCompatActivity {
 
     }
 
-    // Handling the chosen picture
+    /** Changing the profile picture and store it afterwards asynchronously **/
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null )
         {
-            Uri filePath = data.getData();
-            BitmapFactory image = new BitmapFactory();
 
+            Uri imageUri = data.getData();
+            profileImageView.setImageURI(imageUri);
+            new StoreProgfileImage().execute(imageUri);
 
         }
     }
 
-    private void changeProfilePicture() {
 
-
-    }
-
+    /**TODO: We could store the username once he logs in and after that chech only the userId
+     * TODO: to decide whether to keep the same username(ie its the same user) or to query the logged in
+     * TODO: users user name from FireBase**/
     private void setUpFireBase() {
         mAuth= FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
@@ -188,6 +204,32 @@ public class UserActivity extends AppCompatActivity {
 
     }
 
+    private class StoreProgfileImage extends AsyncTask<Uri,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Uri... uris) {
+
+            Uri imageUri = uris[0];
+            InputStream imageStream = null;
+            try {
+                imageStream = getContentResolver().openInputStream(imageUri);
+                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                FileOutputStream fos = openFileOutput(mUserId,Context.MODE_PRIVATE);
+                selectedImage.compress(Bitmap.CompressFormat.PNG,10,fos);
+                Log.d(TAG, "onActivityResult: SAVED");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            makeToast("Image successfully saved");
+        }
+    }
+
     private void findViewsById(){
         usernameTextView=(TextView)findViewById(R.id.tv_user_user_name);
         profileImageView =(CircleImageView)findViewById(R.id.profile_image);
@@ -224,6 +266,8 @@ public class UserActivity extends AppCompatActivity {
 
 
 
+
+    private void nonNeededCode(){
 /**=================================NON NEEDED===============================**/
 
     //ChooseImageToUpload()
@@ -310,5 +354,5 @@ public class UserActivity extends AppCompatActivity {
      }
      **/
 
-
+    }
 }

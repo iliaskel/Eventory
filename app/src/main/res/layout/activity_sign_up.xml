@@ -3,7 +3,8 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- User information relative layout-->
     <RelativeLayout
@@ -28,7 +29,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_register_msg"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            app:hintTextAppearance="@style/TextAppearence.TextInputLayout.DarkGrey"
+            android:layout_alignParentStart="true">
 
             <EditText
                 android:textSize="15sp"
@@ -45,7 +48,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/til_username"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            app:hintTextAppearance="@style/TextAppearence.TextInputLayout.DarkGrey">
             <EditText
                 android:id="@+id/et_sign_up_email"
                 android:layout_width="150dp"
@@ -64,7 +68,8 @@
             android:layout_below="@id/tv_register_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            app:hintTextAppearance="@style/TextAppearence.TextInputLayout.DarkGrey">
             <EditText
                 android:id="@+id/et_sign_up_password"
                 android:layout_width="150dp"
@@ -81,7 +86,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/til_password"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true">
+            android:layout_alignParentEnd="true"
+            app:hintTextAppearance="@style/TextAppearence.TextInputLayout.DarkGrey">
 
             <EditText
                 android:id="@+id/et_sign_up_password_confirm"
@@ -154,14 +160,15 @@
             android:id="@+id/til_place_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            app:hintTextAppearance="@style/TextAppearence.TextInputLayout.DarkGrey">
 
             <EditText
                 android:textSize="15sp"
                 android:id="@+id/et_sign_up_place_name"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:hint="Place Name" />
+                android:hint="@string/sign_up_place_name" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -172,6 +179,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_marginTop="9dp"
+            app:hintTextAppearance="@style/TextAppearence.TextInputLayout.DarkGrey"
             >
         <AutoCompleteTextView
             android:id="@+id/et_sign_up_place_address"

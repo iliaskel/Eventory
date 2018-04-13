@@ -10,6 +10,7 @@ package com.example.android.eventory.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -17,9 +18,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 
@@ -40,7 +43,7 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
 
-public class EventsActivity extends AppCompatActivity {
+public class EventsActivity extends AppCompatActivity implements EventsAdapter.EventItemClickListener{
 
     private static final String TAG = "EventsActivity";
     private final Context mContex=EventsActivity.this;
@@ -51,7 +54,7 @@ public class EventsActivity extends AppCompatActivity {
     private boolean isFirstTime=true;           //Used for defining is it's the first time displaying the event's list
     protected static ArrayList<EventInformation> mEventsList=new ArrayList<>();
     protected Location mLastKnownLocation;
-    private EventsAdapter adapter=new EventsAdapter(mEventsList);
+    private EventsAdapter adapter=new EventsAdapter(mEventsList,this);
 
     //fab for adding new events || Shown only to owners
     private FloatingActionButton mAddEvent;
@@ -90,6 +93,7 @@ public class EventsActivity extends AppCompatActivity {
      * =================== Init Methods ============================
      */
         private void setUpFireBase() {
+            Log.d(TAG, "setUpFireBase: ");
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser =mAuth.getCurrentUser();
         try{
@@ -120,12 +124,14 @@ public class EventsActivity extends AppCompatActivity {
     }
 
         private void findViews() {
+            Log.d(TAG, "findViews: ");
         mAddEvent=(FloatingActionButton)findViewById(R.id.fab_add_event);
         mEventsRecyclerView=(RecyclerView)findViewById(R.id.rv_events);
         mEventsRecyclerView.setHasFixedSize(true);
     }
 
         private void initRecyclerView() {
+            Log.d(TAG, "initRecyclerView: ");
 
         LinearLayoutManager layoutManager=new LinearLayoutManager(this);
         mEventsRecyclerView.setLayoutManager(layoutManager);
@@ -181,6 +187,7 @@ public class EventsActivity extends AppCompatActivity {
     }
 
         private void setUpFab() {
+            Log.d(TAG, "setUpFab: ");
         if(mIsOwner) {
             Log.d(TAG, "setUpFab: IS OWNER");
             mAddEvent.setVisibility(View.VISIBLE);
@@ -208,14 +215,6 @@ public class EventsActivity extends AppCompatActivity {
         MenuItem menuItem=menu.getItem(ACTIVITY_NUMBER);
         menuItem.setChecked(true);
     }
-
-    /**
-     * =============================================================
-     */
-
-
-
-
 
 
     /**
@@ -263,4 +262,27 @@ public class EventsActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onEventItemClickListener(final View clickedEvent) {
+
+        PopupMenu popupMenu = new PopupMenu(this,clickedEvent);
+        Log.d(TAG, "onEventItemClickListener: SDK VERSION :: " + Build.VERSION.SDK_INT);
+        popupMenu.inflate(R.menu.event_attending_menu);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+
+                switch (menuItem.getItemId()){
+                    case R.id.attending:
+                        showToast("Attending");
+                        Log.d(TAG, "onMenuItemClick: " +clickedEvent.toString());
+                        break;
+                    case R.id.not_attending:
+                        showToast("Not Attending ");
+                }
+                return false;
+            }
+        });
+        popupMenu.show();
+    }
 }
