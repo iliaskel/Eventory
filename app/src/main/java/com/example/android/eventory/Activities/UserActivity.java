@@ -34,7 +34,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -153,7 +152,7 @@ public class UserActivity extends AppCompatActivity {
 
             Uri imageUri = data.getData();
             profileImageView.setImageURI(imageUri);
-            new StoreProgfileImage().execute(imageUri);
+            new StoreProfileImage().execute(imageUri);
 
         }
     }
@@ -204,7 +203,7 @@ public class UserActivity extends AppCompatActivity {
 
     }
 
-    private class StoreProgfileImage extends AsyncTask<Uri,Void,Void>{
+    private class StoreProfileImage extends AsyncTask<Uri,Void,Void>{
 
         @Override
         protected Void doInBackground(Uri... uris) {

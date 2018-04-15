@@ -58,8 +58,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     public void onMapReady(GoogleMap googleMap) {
-        // Add a marker in Sydney, Australia,
-        // and move the map's camera to the same location.
+
         Log.d(TAG, "onMapReady: list size==" + String.valueOf(eventsList.size()));
         for (int i = 0; i < eventsList.size(); i++) {
             MarkerOptions markerOptions = new MarkerOptions();
