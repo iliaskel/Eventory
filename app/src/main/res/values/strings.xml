@@ -23,11 +23,11 @@
     <string name="sign_up_rb_user">User</string>
     <string name="sign_up_rb_owner">Owner</string>
     <string name="sign_up_place_info_title">Provide your place\'s information</string>
-    <string name="sign_up_place_name">Name</string>
+    <string name="sign_up_place_name">Place Name</string>
     <string name="sign_up_place_address">Address</string>
     <string name="sign_up_place_phone">Phone</string>
     <string name="sign_up_sign_up_button">Sign up</string>
-    <string name="sign_up_place_name">Place Name</string>
+
 
     <!-- New event strings -->
     <string name="new_event_name">Name</string>
