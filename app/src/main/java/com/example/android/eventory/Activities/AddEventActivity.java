@@ -57,12 +57,13 @@ public class AddEventActivity extends AppCompatActivity {
     private String mUserId;
 
 
-    //vars
+
     private String mAddress;
     private String mPlaceName;
 
     private double mLatitudeDouble;
     private double mLongitudeDouble;
+
     //delete lat/lng String after complete
     private String mLatitude;
     private String mLongitude;

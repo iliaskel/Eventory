@@ -158,9 +158,9 @@ public class UserActivity extends AppCompatActivity {
     }
 
 
-    /**TODO: We could store the username once he logs in and after that chech only the userId
-     * TODO: to decide whether to keep the same username(ie its the same user) or to query the logged in
-     * TODO: users user name from FireBase**/
+    /** TODO: We could store the username once he logs in and after that chech only the userId
+     * to decide whether to keep the same username(ie its the same user) or to query the logged in
+     *  users user name from FireBase**/
     private void setUpFireBase() {
         mAuth= FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
