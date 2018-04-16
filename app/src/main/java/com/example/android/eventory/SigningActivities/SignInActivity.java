@@ -122,10 +122,10 @@ public class SignInActivity extends AppCompatActivity  {
     }
 
         private void findViews() {
-        mInputMail=(TextView)findViewById(R.id.et_input_email);
-        mInputPassword=(TextView)findViewById(R.id.et_input_password);
-        mLoginButton=(Button)findViewById(R.id.btn_login);
-        mSignUp=(TextView)findViewById(R.id.link_signup);
+        mInputMail=findViewById(R.id.et_input_email);
+        mInputPassword=findViewById(R.id.et_input_password);
+        mLoginButton=findViewById(R.id.btn_login);
+        mSignUp=findViewById(R.id.link_signup);
     }
 
 

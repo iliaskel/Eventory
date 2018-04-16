@@ -113,13 +113,13 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
         private void findViewsById() {
-        mNewEventName =(EditText) findViewById(R.id.et_new_event_name);
-        mNewEventType =(EditText) findViewById(R.id.et_new_event_type);
-        mAddEventBtn=(Button)findViewById(R.id.new_event_add_btn);
-        mCancelButton=(Button)findViewById(R.id.new_event_cancel_btn);
-        mNewEventYear=(EditText)findViewById(R.id.et_new_event_year);
-        mNewEventMonth=(EditText)findViewById(R.id.et_new_event_month);
-        mNewEventDay=(EditText)findViewById(R.id.et_new_event_day);
+        mNewEventName = findViewById(R.id.et_new_event_name);
+        mNewEventType = findViewById(R.id.et_new_event_type);
+        mAddEventBtn=findViewById(R.id.new_event_add_btn);
+        mCancelButton=findViewById(R.id.new_event_cancel_btn);
+        mNewEventYear=findViewById(R.id.et_new_event_year);
+        mNewEventMonth=findViewById(R.id.et_new_event_month);
+        mNewEventDay=findViewById(R.id.et_new_event_day);
 
     }
 
@@ -140,11 +140,6 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-
-
 
     /**
      * ======== CALENDAR AND ITS  LISTENERS===========

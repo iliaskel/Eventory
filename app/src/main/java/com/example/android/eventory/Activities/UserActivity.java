@@ -230,8 +230,8 @@ public class UserActivity extends AppCompatActivity {
     }
 
     private void findViewsById(){
-        usernameTextView=(TextView)findViewById(R.id.tv_user_user_name);
-        profileImageView =(CircleImageView)findViewById(R.id.profile_image);
+        usernameTextView=findViewById(R.id.tv_user_user_name);
+        profileImageView =findViewById(R.id.profile_image);
 
     }
 

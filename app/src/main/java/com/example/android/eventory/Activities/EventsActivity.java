@@ -125,8 +125,8 @@ public class EventsActivity extends AppCompatActivity implements EventsAdapter.E
 
         private void findViews() {
             Log.d(TAG, "findViews: ");
-        mAddEvent=(FloatingActionButton)findViewById(R.id.fab_add_event);
-        mEventsRecyclerView=(RecyclerView)findViewById(R.id.rv_events);
+        mAddEvent=findViewById(R.id.fab_add_event);
+        mEventsRecyclerView=findViewById(R.id.rv_events);
         mEventsRecyclerView.setHasFixedSize(true);
     }
 

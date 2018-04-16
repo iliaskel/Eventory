@@ -255,16 +255,16 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
      * =================== Init Methods ============================
      */
         private void findViews() {
-        mUserName=(EditText)findViewById(R.id.et_sign_up_name);
-        mUserPassword =(EditText)findViewById(R.id.et_sign_up_password);
-        mUserEmail=(EditText)findViewById(R.id.et_sign_up_email);
-        mPlaceName=(EditText)findViewById(R.id.et_sign_up_place_name);
-        mPlaceAddress=(AutoCompleteTextView) findViewById(R.id.et_sign_up_place_address);
-        mUserTypeGroup=(RadioGroup)findViewById(R.id.rg_sign_up_user_type);
-        mRlUserType =(RelativeLayout)findViewById(R.id.rl_place_information);
-        mSignUpButton=(Button)findViewById(R.id.btn_sign_up);
+        mUserName=findViewById(R.id.et_sign_up_name);
+        mUserPassword =findViewById(R.id.et_sign_up_password);
+        mUserEmail=findViewById(R.id.et_sign_up_email);
+        mPlaceName=findViewById(R.id.et_sign_up_place_name);
+        mPlaceAddress= findViewById(R.id.et_sign_up_place_address);
+        mUserTypeGroup=findViewById(R.id.rg_sign_up_user_type);
+        mRlUserType =findViewById(R.id.rl_place_information);
+        mSignUpButton=findViewById(R.id.btn_sign_up);
         mRlUserType.setVisibility(View.INVISIBLE);
-        mPasswordConfirm=(EditText)findViewById(R.id.et_sign_up_password_confirm);
+        mPasswordConfirm=findViewById(R.id.et_sign_up_password_confirm);
     }
 
         private void setUpAddressAutocomplete() {
