@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.android.eventory.R;
@@ -47,28 +46,16 @@ public class AddEventActivity extends AppCompatActivity {
     private EditText mNewEventDay;
     private Button mCancelButton;
     private Button mAddEventBtn;
-    private LinearLayout mLlDate;
 
 
-    private FirebaseAuth mAuth;
-    private FirebaseDatabase mDatabase;
     private DatabaseReference myRef;
-    private FirebaseUser mCurrentUser;
     private String mUserId;
-
-
-
     private String mAddress;
     private String mPlaceName;
 
     private double mLatitudeDouble;
     private double mLongitudeDouble;
 
-    //delete lat/lng String after complete
-    private String mLatitude;
-    private String mLongitude;
-    private String mEventsName;
-    private String mEventsType;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,6 +69,7 @@ public class AddEventActivity extends AppCompatActivity {
         setUpFireBase();
 
         // Pulling Place info stored in FireBase Database
+        // so they can automatically be stored at the event
         getUserPlacesInfo();
 
         // CANCEL && ADD event listeners
@@ -89,18 +77,25 @@ public class AddEventActivity extends AppCompatActivity {
 
         // Date picker listeners
         setCalendarListeners();
+    }
 
-
+    private void findViewsById() {
+        mNewEventName = findViewById(R.id.et_new_event_name);
+        mNewEventType = findViewById(R.id.activity_add_et_new_event_type);
+        mAddEventBtn=findViewById(R.id.new_event_add_btn);
+        mCancelButton=findViewById(R.id.new_event_cancel_btn);
+        mNewEventYear=findViewById(R.id.activity_add_et_new_event_year);
+        mNewEventMonth=findViewById(R.id.activity_add_et_new_event_month);
+        mNewEventDay=findViewById(R.id.activity_add_et_new_event_day);
 
     }
 
 
-
-        private void setUpFireBase() {
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance();
-        myRef=mDatabase.getReference();
-        mCurrentUser =mAuth.getCurrentUser();
+    private void setUpFireBase() {
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+        myRef= mDatabase.getReference();
+            FirebaseUser mCurrentUser = mAuth.getCurrentUser();
         try{
             mUserId= mCurrentUser.getUid();
         }
@@ -112,22 +107,12 @@ public class AddEventActivity extends AppCompatActivity {
         }
     }
 
-        private void findViewsById() {
-        mNewEventName = findViewById(R.id.et_new_event_name);
-        mNewEventType = findViewById(R.id.et_new_event_type);
-        mAddEventBtn=findViewById(R.id.new_event_add_btn);
-        mCancelButton=findViewById(R.id.new_event_cancel_btn);
-        mNewEventYear=findViewById(R.id.et_new_event_year);
-        mNewEventMonth=findViewById(R.id.et_new_event_month);
-        mNewEventDay=findViewById(R.id.et_new_event_day);
 
-    }
-
-        private void getUserPlacesInfo() {
+    private void getUserPlacesInfo() {
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mAddress=dataSnapshot.child("places").child(mUserId).getValue(PlaceInformation.class).getAddress();
                 mPlaceName=dataSnapshot.child("places").child(mUserId).getValue(PlaceInformation.class).getName();
                 mLatitudeDouble=dataSnapshot.child("places").child(mUserId).getValue(PlaceInformation.class).getLatitudeDouble();
@@ -135,7 +120,7 @@ public class AddEventActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
@@ -176,22 +161,29 @@ public class AddEventActivity extends AppCompatActivity {
                 }
                 else{
                     StringBuilder date=new StringBuilder();
-                    date.append(eventYear+"-");
-                    date.append(eventMonth+"-");
+                    date.append(eventYear).append("-");
+                    date.append(eventMonth).append("-");
                     date.append(eventDay);
 
                     String key=myRef.child("events").push().getKey();
+                    if(key!=null){
+                        EventInformation event=new EventInformation(eventName,mPlaceName,eventType,date.toString(),mLatitudeDouble,mLongitudeDouble);
+                        Log.d(TAG, "onClick: EVENT "+event.toString());
+                        myRef.child("events").child(key).setValue(event).addOnCompleteListener(new OnCompleteListener<Void>() {
 
-                    EventInformation event=new EventInformation(eventName,mPlaceName,eventType,date.toString(),mLatitudeDouble,mLongitudeDouble);
-                    Log.d(TAG, "onClick: EVENT "+event.toString());
-                    myRef.child("events").child(key).setValue(event).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                showToast("successfully entered the event");
+                                finish();
+                            }
+                        });
+                    }
+                    else{
+                        showToast("Cannot create event at this time.");
+                        finish();
+                    }
 
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            showToast("successfully entered the event");
-                            finish();
-                        }
-                    });
+
                 }
             }
         });
@@ -283,9 +275,8 @@ public class AddEventActivity extends AppCompatActivity {
         mNewEventMonth.setText(String.valueOf(month));
     }
 
-
     /**
-     * ==============================
+     *=========================================================================
      */
 
         private void showToast(String s){

@@ -1,6 +1,7 @@
 package com.example.android.eventory;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.EventLog;
 import android.util.Log;
@@ -26,7 +27,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.HomeViewHo
     private static final String TAG = "EventsAdapter";
     final private EventItemClickListener mOnClickListener;
 
-    List<EventInformation> mEventsList;
+    private List<EventInformation> mEventsList;
 
     public EventsAdapter(List<EventInformation> eventsList, EventItemClickListener listener){
         Log.d(TAG, "EventsAdapter: entered");
@@ -34,8 +35,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.HomeViewHo
         mOnClickListener = listener;
     }
 
+    @NonNull
     @Override
-    public HomeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public HomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context=parent.getContext();
         LayoutInflater layoutInflater=LayoutInflater.from(context);
         View view=layoutInflater.inflate(R.layout.list_item_event,parent,false);
@@ -43,7 +45,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.HomeViewHo
     }
 
     @Override
-    public void onBindViewHolder(HomeViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
         holder.bind(position);
     }
 
@@ -57,13 +59,15 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.HomeViewHo
         private static final String TAG = "HomeViewHolder";
 
         TextView mEventName,mEventPlace,mEventDate,mEventDistance,mEventType;
-        public HomeViewHolder(View itemView) {
+        String eventID;
+        HomeViewHolder(View itemView) {
             super(itemView);
-            mEventName=(TextView)itemView.findViewById(R.id.tv_event_name);
-            mEventPlace=(TextView)itemView.findViewById(R.id.tv_event_place);
-            mEventDate=(TextView)itemView.findViewById(R.id.tv_event_date);
-            mEventDistance=(TextView)itemView.findViewById(R.id.tv_event_distance);
-            mEventType=(TextView)itemView.findViewById(R.id.tv_event_type);
+            mEventName= itemView.findViewById(R.id.tv_event_name);
+            mEventPlace= itemView.findViewById(R.id.tv_event_place);
+            mEventDate= itemView.findViewById(R.id.tv_event_date);
+            mEventDistance= itemView.findViewById(R.id.tv_event_distance);
+            mEventType= itemView.findViewById(R.id.tv_event_type);
+
             itemView.setOnClickListener(this);
         }
 
@@ -78,16 +82,18 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.HomeViewHo
             mEventType.setText(event.getType());
             mEventDistance.setVisibility(View.INVISIBLE);
             mEventDate.setText(event.getDate());
+            eventID = event.getEventID();
+            Log.d(TAG, "bind: eventID :: " + eventID);
         }
 
 
         @Override
         public void onClick(View view) {
-            mOnClickListener.onEventItemClickListener(view);
+            mOnClickListener.onEventItemClickListener(view,eventID);
         }
     }
 
     public interface EventItemClickListener{
-        void onEventItemClickListener(View clickedEvent);
+        void onEventItemClickListener(View clickedEvent,String eventID);
     }
 }

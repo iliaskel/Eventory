@@ -1,12 +1,13 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/darkGrey</item>
+        <item name="colorPrimaryDark">@color/darkGrey</item>
+        <item name="colorAccent">@color/darkGrey</item>
     </style>
+
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -19,6 +20,14 @@
 
     <style name="TextAppearence.TextInputLayout.DarkGrey" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/darkGrey</item>
+    </style>
+
+    <style name="TextAppearence.App.TextInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/darkGrey</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:colorControlActivated" tools:targetApi="lollipop">@color/darkGrey</item>
+        <item name="android:colorControlHighlight" tools:targetApi="lollipop">@color/darkGrey</item>
+        <item name="android:colorControlNormal" tools:targetApi="lollipop">@color/darkGrey</item>
     </style>
 
 </resources>

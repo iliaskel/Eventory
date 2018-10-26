@@ -9,5 +9,7 @@
             android:id="@+id/rv_events">
 
         </android.support.v7.widget.RecyclerView>
+
+
     </RelativeLayout>
 </merge>

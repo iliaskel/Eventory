@@ -28,6 +28,7 @@
             android:layout_below="@id/reLayout1"
             android:layout_above="@+id/bottom_navigation_layout">
 
+
             <include layout="@layout/layout_center_viewpager"/>
 
             <android.support.design.widget.FloatingActionButton
@@ -40,6 +41,7 @@
                 android:layout_alignParentRight="true"
                 android:src="@drawable/ic_action_name"
                 android:clickable="true"
+                android:focusable="true"
                 app:backgroundTint="@color/white"
                 />
 

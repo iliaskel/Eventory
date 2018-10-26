@@ -7,20 +7,29 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.EventLog;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.eventory.AttendingEventsAdapter;
 import com.example.android.eventory.R;
+import com.example.android.eventory.Signingformation.EventInformation;
 import com.example.android.eventory.Signingformation.UserInformation;
 import com.example.android.eventory.Utils.BottomNavigationViewHelper;
+import com.google.android.gms.location.SettingsClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +44,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.datatype.Duration;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -51,21 +64,24 @@ public class UserActivity extends AppCompatActivity {
     private final int PICK_IMAGE_REQUEST = 71;
 
 
-    private String mUserId;
+
+
 
     private TextView usernameTextView;
     private CircleImageView profileImageView;
+    private RecyclerView attendindEventsRecyclerView;
+    private AttendingEventsAdapter attendingEventsAdapter;
+    private static ArrayList<EventInformation> attendingEventsList = new ArrayList<>();
+
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private FirebaseUser mCurrentUser;
-    private String userId;
 
-
-
-
-
-
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference();
+    private FirebaseUser currentUser;
+    private String userID;
+    private String mUserId;
 
 
 
@@ -76,17 +92,34 @@ public class UserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user);
 
         setUpBottomNavigationView();
-        findViewsById();
-        setUpFireBase();
 
+        findViewsById();
+
+        setUpFireBase();
 
         //Pop up menu for profile image functions
         setUpPopUpMenu();
 
         setProfilePicture();
 
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater= getMenuInflater();
+        inflater.inflate(R.menu.settings_menu,menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.action_settings:
+                Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setProfilePicture() {
@@ -163,7 +196,7 @@ public class UserActivity extends AppCompatActivity {
      *  users user name from FireBase**/
     private void setUpFireBase() {
         mAuth= FirebaseAuth.getInstance();
-        mCurrentUser = mAuth.getCurrentUser();
+        FirebaseUser mCurrentUser = mAuth.getCurrentUser();
         mUserId = mCurrentUser.getUid();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -171,35 +204,79 @@ public class UserActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Log.d(TAG, "onAuthStateChanged: signed_in: " + user.getUid());
                 } else {
                     // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                    Log.d(TAG, "onAuthStateChanged: signed_out ");
                 }
-                // ...
             }
         };
 
         mCurrentUser =mAuth.getCurrentUser();
-        userId= mCurrentUser.getUid();
+        String userId = mCurrentUser.getUid();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef=database.getReference("users/"+userId);
+        DatabaseReference myRef=database.getReference();
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onDataChange: " +dataSnapshot.getValue());
-                UserInformation userInformation=new UserInformation();
-                userInformation.setName(dataSnapshot.getValue(UserInformation.class).getName());
-                Log.d(TAG, "onDataChange: "+userInformation.getName());
-                usernameTextView.setText(userInformation.getName());
+                setUserName(dataSnapshot);
+
+                getAttendingEvents(dataSnapshot);
+
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
+
+    }
+
+    //TODO: BETTER NAME
+    private void getAttendingEvents(DataSnapshot dataSnapshot) {
+
+        ArrayList<EventInformation> attendingEventsList = new ArrayList<>();
+        boolean isFirstTime=true;
+        if (attendingEventsList.size()!=0)
+            isFirstTime=false;
+        DataSnapshot attendingData = dataSnapshot.child("attending").child(mUserId);
+        DataSnapshot eventsAll = dataSnapshot.child("events");
+        for (DataSnapshot ds : attendingData.getChildren()) {
+            String eventID = ds.getKey();
+            Log.d(TAG, "getAttendingEvents: eventID " + eventID);
+            EventInformation event = new EventInformation();
+            event.setType(eventsAll.child(eventID).getValue(EventInformation.class).getType());
+            event.setDate(eventsAll.child(eventID).getValue(EventInformation.class).getDate());
+            event.setPlace_name(eventsAll.child(eventID).getValue(EventInformation.class).getPlace_name());
+            event.setEvent_name(eventsAll.child(eventID).getValue(EventInformation.class).getEvent_name());
+            attendingEventsList.add(event);
+            Log.d(TAG, "onDataChange: User Activity\n" + event.toString());
+
+        }
+        Log.d(TAG, "onDataChange: att " + attendingEventsList.size());
+
+        if (isFirstTime){
+            attendindEventsRecyclerView.setHasFixedSize(true);
+            attendindEventsRecyclerView.setLayoutManager(new LinearLayoutManager(UserActivity.this));
+            attendingEventsAdapter = new AttendingEventsAdapter(attendingEventsList);
+            attendindEventsRecyclerView.setAdapter(attendingEventsAdapter);
+        }
+        else
+        {
+            attendingEventsAdapter.notifyDataSetChanged();
+        }
+
+
+    }
+
+    private void setUserName(DataSnapshot dataSnapshot) {
+        UserInformation userInformation=new UserInformation();
+        userInformation.setName(dataSnapshot.child("users").child(mUserId).getValue(UserInformation.class).getName());
+        Log.d(TAG, "onDataChange: "+userInformation.getName());
+        usernameTextView.setText(userInformation.getName());
 
     }
 
@@ -225,13 +302,23 @@ public class UserActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            makeToast("Image successfully saved");
+            showToast("Image successfully saved");
         }
     }
 
     private void findViewsById(){
         usernameTextView=findViewById(R.id.tv_user_user_name);
         profileImageView =findViewById(R.id.profile_image);
+        ImageView settingsImageView = findViewById(R.id.setting_image_view);
+        settingsImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showToast("clicked");
+                Intent settingsIntent = new Intent(UserActivity.this,SettingsActivity.class);
+                startActivity(settingsIntent);
+            }
+        });
+        attendindEventsRecyclerView = findViewById(R.id.user_activity_rv_attending);
 
     }
 
@@ -249,6 +336,19 @@ public class UserActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                getAttendingEvents(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -259,99 +359,8 @@ public class UserActivity extends AppCompatActivity {
         }
     }
 
-    private void makeToast(String msg){
-        Toast.makeText(mContext,msg,Toast.LENGTH_SHORT).show();
+    private void showToast(String text){
+        Toast.makeText(UserActivity.this,text,Toast.LENGTH_SHORT).show();
     }
 
-
-
-
-    private void nonNeededCode(){
-/**=================================NON NEEDED===============================**/
-
-    //ChooseImageToUpload()
-
-
-
-
-
-
-
-    //uploadProfilePicture()
-    /** upladProfilePicture()
-     *
-     private void uploadProfilePicture(Uri filePathUri) {
-
-     if(filePathUri != null)
-     {
-     final ProgressDialog progressDialog = new ProgressDialog(this);
-     progressDialog.setTitle("Uploading...");
-     progressDialog.show();
-
-     StorageReference ref = mStorageRef.child("images/"+ mUserId);
-     Log.d(TAG, "uploadProfilePicture: Path: images/"+mUserId);
-     ref.putFile(filePathUri)
-     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-    @Override
-    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-    progressDialog.dismiss();
-    Toast.makeText(mContext, "Uploaded", Toast.LENGTH_SHORT).show();
-    }
-    })
-     .addOnFailureListener(new OnFailureListener() {
-    @Override
-    public void onFailure(@NonNull Exception e) {
-    progressDialog.dismiss();
-    Toast.makeText(mContext, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
-    }
-    })
-     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-    @Override
-    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-    double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
-    .getTotalByteCount());
-    progressDialog.setMessage("Uploaded "+(int)progress+"%");
-    }
-    });
-     }
-
-     }
-     **/
-
-    /**
-     private void downloadProfilePicture() {
-     try {
-     File localFile = null;
-     StorageReference pathReference = mStorageRef.child("images/"+mUserId);
-     Log.d(TAG, "onCreate: Download Path: "+pathReference.toString());
-     localFile = File.createTempFile("images", "jpeg");
-     final File finalLocalFile = localFile;
-
-     pathReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-    @Override
-    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-    // Local temp file has been created
-    Log.d(TAG, "onSuccess: File downloaded");
-    String localPath = finalLocalFile.getPath();
-    Log.d(TAG, "onSuccess: File downloaded - LocalPath: "+localPath.toString());
-    Bitmap bMap = BitmapFactory.decodeFile(localPath);
-    profileImageView.setImageBitmap(bMap);
-    }
-    }).addOnFailureListener(new OnFailureListener() {
-    @Override
-    public void onFailure(@NonNull Exception exception) {
-    // Handle any errors
-    Log.d(TAG, "onFailure: File downloading Error" +exception.getMessage());
-
-    }
-    });
-
-
-     } catch (IOException e) {
-     e.printStackTrace();
-     }
-     }
-     **/
-
-    }
 }

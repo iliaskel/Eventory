@@ -39,17 +39,28 @@
             android:layout_below="@id/profile_image"
             android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
-            android:text="user"
+            android:text="@string/user_name"
             android:textSize="15sp"/>
 
         <View
+            android:id="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray"
             android:layout_below="@id/tv_user_user_name"
             android:layout_marginTop="20dp"/>
 
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/user_activity_rv_attending">
+
+        </android.support.v7.widget.RecyclerView>
+
     </RelativeLayout>
+
+
 
 
     <RelativeLayout

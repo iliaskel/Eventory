@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="@string/new_event_title"
         android:textAlignment="center"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="@color/darkGrey"
         android:layout_marginTop="20dp"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp">
-        <EditText android:id="@+id/et_new_event_type"
+        <EditText android:id="@+id/activity_add_et_new_event_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/new_event_type" />
@@ -47,12 +47,13 @@
 
     <LinearLayout
         android:layout_marginTop="15dp"
-        android:id="@+id/ll_date"
+        android:id="@+id/activity_add_ll_date"
         android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
-        android:weightSum="120">
+        android:weightSum="120"
+        android:focusable="true">
 
         <TextView
             android:id="@+id/tv_new_event_date"
@@ -60,8 +61,8 @@
             android:layout_height="match_parent"
             android:layout_marginTop="20dp"
             android:layout_weight="20"
-            android:text="Date: "
-            android:textSize="20dp" />
+            android:text="@string/text_view_date"
+            android:textSize="20sp" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="wrap_content"
@@ -70,13 +71,13 @@
 
                 >
                 <EditText
-                    android:id="@+id/et_new_event_year"
+                    android:id="@+id/activity_add_et_new_event_year"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Year"
+                    android:hint="@string/year"
                     android:textAlignment="center"
                     android:clickable="true"
-                    />
+                    android:focusable="true" />
             </android.support.design.widget.TextInputLayout>
 
 
@@ -86,13 +87,13 @@
             android:layout_weight="25"
             >
             <EditText
-                android:id="@+id/et_new_event_month"
+                android:id="@+id/activity_add_et_new_event_month"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAlignment="center"
-                android:hint="Month"
+                android:hint="@string/month"
                 android:clickable="true"
-                />
+                android:focusable="true" />
         </android.support.design.widget.TextInputLayout>
 
 
@@ -102,13 +103,13 @@
             android:layout_weight="25"
             >
             <EditText
-                android:id="@+id/et_new_event_day"
+                android:id="@+id/activity_add_et_new_event_day"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAlignment="center"
-                android:hint="Day"
+                android:hint="@string/day"
                 android:clickable="true"
-                />
+                android:focusable="true" />
         </android.support.design.widget.TextInputLayout>
 
 
@@ -116,7 +117,7 @@
 
     </LinearLayout>
 
-
+`
 
 
 

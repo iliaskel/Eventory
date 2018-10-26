@@ -67,6 +67,7 @@ public class SignInActivity extends AppCompatActivity  {
                 final String email= mInputMail.getText().toString();
                 String pswd= mInputPassword.getText().toString();
                 if(!email.equals("") && !pswd.equals("")){
+                    Log.d(TAG, "onClick: email: " + email + "password: " + pswd);
                     mAuth.signInWithEmailAndPassword(email,pswd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -142,6 +143,7 @@ public class SignInActivity extends AppCompatActivity  {
         public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+
     }
 
         @Override

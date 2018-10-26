@@ -8,9 +8,10 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-feature android:name="android.hardware.location.gps"/>
 
     <application
         android:allowBackup="true"
@@ -19,40 +20,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
-
-
-
-        <activity android:name=".Activities.EventsActivity"
-            android:launchMode="singleInstance">
-        </activity>
-
-        <activity android:name=".Activities.AddEventActivity"
-            android:launchMode="singleInstance"/>
-
-        <activity android:name=".SigningActivities.SignUpActivity"
+        <activity
+            android:name=".Activities.EventsActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".Activities.AddEventActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".SigningActivities.SignUpActivity"
             android:launchMode="singleInstance"
-            android:noHistory="true">
-        </activity>
-
+            android:noHistory="true" />
         <activity
             android:name=".Activities.MapActivity"
             android:launchMode="singleInstance" />
-
         <activity
             android:name=".Activities.UserActivity"
-            android:launchMode="singleInstance" />
-
+            android:launchMode="singleInstance"
+            />
 
         <activity android:name=".SigningActivities.SignInActivity">
             <intent-filter>
-
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -66,6 +62,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <activity
+            android:name=".Activities.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

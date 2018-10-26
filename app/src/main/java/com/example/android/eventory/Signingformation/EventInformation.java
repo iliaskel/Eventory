@@ -10,6 +10,7 @@ public class EventInformation  {
     private String place_name;
     private String type;
     private String date;
+    private String eventID;
 
     private double latitude;
     private double longitude;
@@ -26,6 +27,14 @@ public class EventInformation  {
         this.longitude=longitude;
     }
 
+    public EventInformation(String event_name, String place_name, String type, String date,double latitude,double longitude,String eventID){
+        this.event_name=event_name;
+        this.place_name=place_name;
+        this.type=type;
+        this.date=date;
+        this.latitude=latitude;
+        this.longitude=longitude;
+    }
 
 
     public String getEvent_name() {
@@ -88,5 +97,13 @@ public class EventInformation  {
         event+="\nLng\t:"+String.valueOf(longitude);
 
         return event;
+    }
+
+    public String getEventID() {
+        return eventID;
+    }
+
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
     }
 }

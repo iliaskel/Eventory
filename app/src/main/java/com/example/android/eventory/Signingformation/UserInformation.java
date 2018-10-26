@@ -41,3 +41,5 @@ public class UserInformation {
         this.type = type;
     }
 }
+
+

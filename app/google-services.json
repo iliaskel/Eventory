@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "191123340899-raf7v2vjetgruaitvtttpmtj782704ru.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.android.eventory",
+            "certificate_hash": "148968c86f2937c824ddd105cbc178c27dd0b4b1"
+          }
+        },
+        {
           "client_id": "191123340899-o49pkesm59ihnheo7u7kmkhqnuveb6bq.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -40,15 +48,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
+              "client_id": "191123340899-o49pkesm59ihnheo7u7kmkhqnuveb6bq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
               "client_id": "191123340899-23t3g07vvscncgc9m821okij0rtntldq.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.arnaoutakis.Eventory"
               }
-            },
-            {
-              "client_id": "191123340899-o49pkesm59ihnheo7u7kmkhqnuveb6bq.apps.googleusercontent.com",
-              "client_type": 3
             }
           ]
         },

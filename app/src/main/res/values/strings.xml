@@ -5,9 +5,9 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
-    
+
     <!-- Sign in activity . mxl strings -->
-    
+
     <string name="sign_up_link">No account yet? Create one!</string>
     <string name="sign_in_email">Email</string>
     <string name="sign_in_password">Password</string>
@@ -35,4 +35,10 @@
     <string name="new_event_title">Add Event\'s Information</string>
     <string name="new_event_cancel_btn">Cancel</string>
     <string name="new_event_add_btn">Add</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="user_name">user</string>
+    <string name="text_view_date">Date:</string>
+    <string name="year">Year</string>
+    <string name="month">Month</string>
+    <string name="day">Day</string>
 </resources>

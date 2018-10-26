@@ -62,7 +62,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private FirebaseDatabase mDatabase;
+    private FirebaseDatabase database;
     private DatabaseReference myRef;
 
     private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
@@ -125,12 +125,12 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                     double longitudeDouble;
                     String addressString = mPlaceAddress.getText().toString();
                     Geocoder geocoder = new Geocoder(SignUpActivity.this);
-                    List<Address> addressList = new ArrayList<>();
+                    List<Address> coordinatesList = new ArrayList<>();
 
 
                     try {
-                        addressList = geocoder.getFromLocationName(addressString, 1);
-                        Log.d(TAG, "onComplete: address list == " + addressList);
+                        coordinatesList = geocoder.getFromLocationName(addressString, 1);
+                        Log.d(TAG, "onComplete: address list == " + coordinatesList);
                     } catch (IOException e) {
                         mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -145,10 +145,10 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                     }
 
                     try {
-                        Log.d(TAG, "onComplete: list size == " + String.valueOf(addressList.size()));
-                        if (addressList.size() > 0) {
+                        Log.d(TAG, "onComplete: list size == " + String.valueOf(coordinatesList.size()));
+                        if (coordinatesList.size() > 0) {
 
-                            Address address = addressList.get(0);
+                            Address address = coordinatesList.get(0);
                             latitudeDouble = address.getLatitude();
                             Log.d(TAG, "onComplete: latitude===" + String.valueOf(latitudeDouble));
                             longitudeDouble = address.getLongitude();
@@ -173,6 +173,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                 }
                 else{
                     showToast("An error occurred ");
+                    Log.d(TAG, "onComplete: ERROR");
                 }
             }
         });
@@ -221,7 +222,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                     finish();
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                    Log.w(TAG, "createUserWithEmail:failure"+ task.getException());
                     showToast("An error occurred");
                     finish();
                 }
@@ -233,8 +234,10 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
             String userId=mAuth.getCurrentUser().getUid();
 
             if(mUserTypeGroup.getCheckedRadioButtonId()==R.id.rb_sign_up_type_user) {
+
                 UserInformation userInfo=new UserInformation(username,email,"user");
                 myRef.child("users").child(userId).setValue(userInfo);
+
             }
             else{
                 UserInformation userInfo=new UserInformation(username,email,"owner");
@@ -268,16 +271,16 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
     }
 
         private void setUpAddressAutocomplete() {
-        mGoogleApiClient = new GoogleApiClient
-                .Builder(mContext)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(this, this)
-                .build();
+            mGoogleApiClient = new GoogleApiClient
+                    .Builder(mContext)
+                    .addApi(Places.GEO_DATA_API)
+                    .addApi(Places.PLACE_DETECTION_API)
+                    .enableAutoManage(this, this)
+                    .build();
 
-        mPlaceAutocompleteAdapter=new PlaceAutocompleteAdapter(this,mGoogleApiClient,LAT_LNG_BOUND,null);
+            mPlaceAutocompleteAdapter=new PlaceAutocompleteAdapter(this,mGoogleApiClient,LAT_LNG_BOUND,null);
 
-        mPlaceAddress.setAdapter(mPlaceAutocompleteAdapter);
+            mPlaceAddress.setAdapter(mPlaceAutocompleteAdapter);
     }
 
         @Override
@@ -287,8 +290,8 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
 
         private void setUpFireBase() {
         mAuth = FirebaseAuth.getInstance();
-        mDatabase=FirebaseDatabase.getInstance();
-        myRef=mDatabase.getReference();
+        database =FirebaseDatabase.getInstance();
+        myRef= database.getReference();
         if(mAuth!=null){
             mAuth.signOut();
         }

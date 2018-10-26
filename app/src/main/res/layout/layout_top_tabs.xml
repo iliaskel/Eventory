@@ -14,8 +14,7 @@
         android:gravity="center"
         android:layout_centerHorizontal="true"
         android:textStyle="bold"
-        android:fontFamily=""
-        android:text="Eventory"/>
+        android:text="@string/app_name"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -23,7 +22,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_action_settings"
-        android:clickable="true"/>
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/setting_image_view"/>
 
 
 </RelativeLayout>
